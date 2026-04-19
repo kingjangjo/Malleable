@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 127354978}
   - component: {fileID: 127354979}
   - component: {fileID: 127354980}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: SoulCore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,11 +214,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9d62f19a0183243a92dae623da5e88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoulCore
-  rb: {fileID: 127354978}
+  rb: {fileID: 0}
   maxSpeed: 4
   acceleration: 10
   deceleration: 15
-  jumpForce: 7
+  jumpForce: 8
   groundLayer:
     serializedVersion: 2
     m_Bits: 192
@@ -522,16 +522,15 @@ MonoBehaviour:
   radius: 1
   restDensity: 6
   stiffness: 60
-  nearStiffness: 30
+  nearStiffness: 60
   viscosity: 0.5
   cohesionRadius: 0.2
-  cohesionStrength: 10
+  cohesionStrength: 5
   environmentLayer:
     serializedVersion: 2
     m_Bits: 128
   particleRadius: 0.05
   groundY: 0
-  pullForce: 0.5
 --- !u!1 &1496759841
 GameObject:
   m_ObjectHideFlags: 0
@@ -638,7 +637,7 @@ Transform:
   m_GameObject: {fileID: 1496759841}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 1.32, z: 0}
+  m_LocalPosition: {x: -5, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 2, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1121,7 +1120,7 @@ GameObject:
   - component: {fileID: 2027405596}
   - component: {fileID: 2027405595}
   - component: {fileID: 2027405594}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

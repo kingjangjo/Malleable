@@ -1,5 +1,6 @@
-using UnityEngine;
+    using NUnit.Framework;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class LiquidSystem : MonoBehaviour
 {
@@ -20,20 +21,43 @@ public class LiquidSystem : MonoBehaviour
     public float boxSize = 3f;
     public float bounce = 0.3f;
 
+    //private SpatialHash SpatialHash;
+    //private List<int> neighborCache = new List<int>();
+
     private Vector3 gravity = new Vector3(0, -9.8f, 0);
 
     void Start()
     {
+        //SpatialHash = new SpatialHash(radius);
         SpawnParticles();
     }
+    //private void FixedUpdate()
+    //{
+    //    float dt = Time.fixedDeltaTime;
+    //    int substeps = 2;
+    //    float subDt = dt / substeps;
 
-    void Update()
+    //    for (int s = 0; s < substeps; s++)
+    //        SimulationStep(subDt);
+    //}
+    private void Update()
     {
         float dt = Mathf.Min(Time.deltaTime, 0.016f);
+        int substeps = 2;
+        float subDt = dt / substeps;
+
+        for (int s = 0; s < substeps; s++)
+            SimulationStep(subDt);
+    }
+    void SimulationStep(float dt)
+    {
+        //float dt = Mathf.Min(Time.deltaTime, 0.016f);
 
         // 1) 중력
         foreach (var p in particles)
             p.velocity += gravity * dt;
+
+        //SpatialHash.Rebuild(particles);
 
         // 2) 점성 (velocity에, 위치 예측 전에)
         ApplyViscosity(dt);
@@ -44,6 +68,8 @@ public class LiquidSystem : MonoBehaviour
             p.prevPosition = p.position;
             p.position += p.velocity * dt;
         }
+
+        //SpatialHash.Rebuild(particles);
 
         // 4) DDR
         DoubleDensityRelaxation(dt);
@@ -59,7 +85,6 @@ public class LiquidSystem : MonoBehaviour
                 p.velocity = p.velocity.normalized * maxSpeed;
         }
     }
-
     void SpawnParticles()
     {
         for (int i = 0; i < particleCount; i++)
@@ -78,6 +103,37 @@ public class LiquidSystem : MonoBehaviour
     {
         for (int i = 0; i < particles.Count; i++)
         {
+            Particle pi = particles[i];
+
+            //SpatialHash.GetNeighborIndices(pi.position, neighborCache);
+
+            //foreach(int j in neighborCache)
+            //{
+            //    if(j <= i)
+            //        continue;
+
+            //    Particle pj = particles[j];
+            //    Vector3 rij = pj.position - pi.position;
+
+            //    float distSq = rij.sqrMagnitude;
+            //    if (distSq >= radius * radius || distSq < 0.00001f)
+            //        continue;
+
+            //    float dist = Mathf.Sqrt(distSq);
+            //    float q = 1f - dist / radius;
+            //    Vector3 n = rij / dist;
+
+            //    // 서로 접근하는 속도 성분만 추출
+            //    float u = Vector3.Dot(
+            //        particles[i].velocity - particles[j].velocity, n);
+
+            //    if (u > 0) // 접근할 때만 감쇠
+            //    {
+            //        Vector3 impulse = dt * q * linearViscosity * u * n;
+            //        particles[i].velocity -= impulse * 0.5f;
+            //        particles[j].velocity += impulse * 0.5f;
+            //    }
+            //}
             for (int j = i + 1; j < particles.Count; j++)
             {
                 Vector3 rij = particles[j].position - particles[i].position;
@@ -111,9 +167,28 @@ public class LiquidSystem : MonoBehaviour
         // 밀도 계산
         for (int i = 0; i < particles.Count; i++)
         {
-            particles[i].density = 0;
-            particles[i].nearDensity = 0;
+            Particle pi = particles[i];
+            pi.density = 0;
+            pi.nearDensity = 0;
 
+            //SpatialHash.GetNeighborIndices(pi.position, neighborCache);
+
+            //foreach(int j in neighborCache)
+            //{
+            //    if (j == i)
+            //        continue;
+
+            //    Particle pj = particles[j];
+
+            //    float distSq = (pj.position - pi.position).sqrMagnitude;
+            //    if (distSq >= radius * radius)
+            //        continue;
+
+            //    float dist = Mathf.Sqrt(distSq);
+            //    float q = 1f - dist / radius;
+            //    pi.density += q * q;
+            //    pi.nearDensity += q * q * q;
+            //}
             for (int j = 0; j < particles.Count; j++)
             {
                 if (i == j) continue;
@@ -127,7 +202,6 @@ public class LiquidSystem : MonoBehaviour
                 }
             }
         }
-
         // 압력 변위
         for (int i = 0; i < particles.Count; i++)
         {
@@ -135,6 +209,35 @@ public class LiquidSystem : MonoBehaviour
             float Pi = stiffness * (pi.density - restDensity);
             float Pi_near = nearStiffness * pi.nearDensity;
 
+            //SpatialHash.GetNeighborIndices(pi.position, neighborCache);
+
+            //foreach (int j in neighborCache)
+            //{
+            //    if (j <= i)
+            //        continue;
+
+            //    Particle pj = particles[j];
+
+            //    float distSq = (pj.position - pi.position).sqrMagnitude;
+            //    if (distSq >= radius * radius)
+            //        continue;
+
+            //    float dist = Mathf.Sqrt(distSq);
+            //    Vector3 rij = pj.position - pi.position;
+            //    float q = 1f - dist / radius;
+            //    Vector3 n = rij / dist;
+
+            //    float Pj = stiffness * (pj.density - restDensity);
+            //    float Pj_near = nearStiffness * pj.nearDensity;
+            //    float D = dt2 * (
+            //            (Pi + Pj) * 0.5f * q +
+            //            (Pi_near + Pj_near) * 0.5f * q * q
+            //        );
+
+            //    Vector3 disp = D * 0.5f * n;
+            //    pi.position -= disp;
+            //    pj.position += disp;
+            //}
             for (int j = i + 1; j < particles.Count; j++)
             {
                 Particle pj = particles[j];
