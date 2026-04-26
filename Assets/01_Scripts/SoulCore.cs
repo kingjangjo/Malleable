@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SoulCore : MonoBehaviour
 {
@@ -26,8 +27,13 @@ public class SoulCore : MonoBehaviour
     void FixedUpdate()
     {
         //지면 체크
+        //isGrounded = Physics.CheckSphere(
+        //    transform.position - Vector3.up * 0.5f,
+        //    groundCheckRadius,
+        //    groundLayer
+        //);
         isGrounded = Physics.CheckSphere(
-            transform.position - Vector3.up * 0.5f,
+            transform.position,
             groundCheckRadius,
             groundLayer
         );
@@ -53,7 +59,7 @@ public class SoulCore : MonoBehaviour
             horizontal = horizontal.normalized * maxSpeed;
             rb.linearVelocity = new Vector3(horizontal.x, vel.y, horizontal.z);
         }
-
+        Debug.Log($"{isGrounded}");
         // 점프
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
