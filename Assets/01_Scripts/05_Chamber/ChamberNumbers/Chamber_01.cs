@@ -1,16 +1,12 @@
 using UnityEngine;
-
-public class Chamber_01 : MonoBehaviour
+// Chamber_01.cs — 챔버 1 전용 스크립트
+// ChamberBase를 상속, 챔버 루트 오브젝트에 부착
+public class Chamber_01 : ChamberBase
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void OnChamberInit()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("Chamber 1 시작");
+        // 지금은 비워둠
+        // 나중에 버튼/상자 초기화 로직이 들어올 자리
     }
 }

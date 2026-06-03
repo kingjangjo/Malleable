@@ -20,7 +20,7 @@ public abstract class ChamberBase : MonoBehaviour
     [Header("Clear Conditions")]
     [Tooltip("이 리스트에 PuzzleCondition을 추가하면 전부 충족 시 출구가 열림. " +
              "비어있으면 자식 클래스에서 TriggerClear()를 직접 호출해야 함.")]
-    //public List<PuzzleCondition> clearConditions = new List<PuzzleCondition>();
+    public List<PuzzleCondition> clearConditions = new List<PuzzleCondition>();
 
     private bool isCleared = false;
 
@@ -56,13 +56,13 @@ public abstract class ChamberBase : MonoBehaviour
         //       리스트에 조건이 있으면 전부 충족 시에만 TriggerClear 호출
 
 
-        //if (clearConditions.Count == 0) return;
+        if (clearConditions.Count == 0) return;
 
-        //foreach (var condition in clearConditions)
-        //{
-        //    if (!condition.IsSatisfied)
-        //        return;
-        //}
+        foreach (var condition in clearConditions)
+        {
+            if (!condition.IsSatisfied)
+                return;
+        }
 
 
         TriggerClear();

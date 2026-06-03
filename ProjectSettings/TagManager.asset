@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LiquidPassable
   - SpawnPoint
+  - SoulCore
   layers:
   - Default
   - TransparentFX

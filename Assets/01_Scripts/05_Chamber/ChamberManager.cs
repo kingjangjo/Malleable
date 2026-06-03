@@ -122,11 +122,11 @@ public class ChamberManager : MonoBehaviour
         player.transform.position = currentSpawnPoint.position;
 
         // [수정 1 연계] 캐싱해둔 pps 사용 (GetComponentInChildren 제거)
-        if (cachedPPS != null)
-        {
-            int count = cachedPPS.particles.Count > 0 ? cachedPPS.particles.Count : 200;
-            cachedPPS.SetSoul(count);
-        }
+        //if (cachedPPS != null)
+        //{
+        //    int count = cachedPPS.particles.Count > 0 ? cachedPPS.particles.Count : 200;
+        //    cachedPPS.SetSoul(count);
+        //}
 
         // [수정 5] 폼 상태도 Soul로 초기화 (챔버 진입 시 항상 액체 상태로 시작)
         // 고체 상태로 이전 챔버를 클리어했을 때 다음 챔버에서도 고체로 시작하는 문제 방지
