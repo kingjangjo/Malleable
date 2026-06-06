@@ -103,7 +103,7 @@ public class PlayerParticleSystem : MonoBehaviour
 
     void OnBeginCamera(ScriptableRenderContext context, Camera camera)
     {
-        if (camera.name != "LiquidCamera") return;
+        //if (camera.name != "MainCamera") return;
         RenderParticles(camera);
     }
 
@@ -633,11 +633,14 @@ public class PlayerParticleSystem : MonoBehaviour
             );
         }
 
-        RenderParams rp = new RenderParams(particleMaterial);
-        rp.layer = LayerMask.NameToLayer("Liquid");
-        rp.camera = camera;
-        rp.worldBounds = new Bounds(Vector3.zero, Vector3.one * 1000f);
+        //RenderParams rp = new RenderParams(particleMaterial);
+        //rp.layer = LayerMask.NameToLayer("Liquid");
+        //rp.camera = camera;
+        //rp.worldBounds = new Bounds(Vector3.zero, Vector3.one * 1000f);
 
-        Graphics.RenderMeshInstanced(rp, particleMesh, 0, instanceMatrices, count);
+        //Graphics.RenderMeshInstanced(rp, particleMesh, 0, instanceMatrices, count);
+
+        EffectLayerRendererFeature.RegisterDraw(
+            particleMesh, 0, particleMaterial, instanceMatrices, count);
     }
 }

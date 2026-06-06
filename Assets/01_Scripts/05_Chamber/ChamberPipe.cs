@@ -76,47 +76,30 @@ public class ChamberPipe : MonoBehaviour
         isTransitioning = true;
         GameManager.Instance.LockInput(transitionDuration);
 
-        if (promptUI != null)
-            promptUI.SetActive(false);
+        if (promptUI != null) promptUI.SetActive(false);
 
-        // [수정 2 연계] 캐싱된 pps 사용
         PlayerParticleSystem pps = cachedPPS;
 
-        // 1. 액체 상태 강제
-        if (pps != null)
-            pps.SetSoul(pps.particles.Count > 0 ? pps.particles.Count : 200);
+        // [제거] SetSoul 호출 삭제 — SpawnPipe가 다음 챔버에서 처리함
+        // 이전: pps.SetSoul(pps.particles.Count > 0 ? pps.particles.Count : 200);
 
-        // 2. 입자 수축 연출
+        // 수축 연출만 유지 (cohesion은 입자 재스폰 없이 기존 입자를 뭉치게만 함)
         float originalCohesion = 0f;
         if (pps != null)
         {
             originalCohesion = pps.cohesionStrength;
-            pps.cohesionStrength = originalCohesion * 5f;
+            pps.cohesionStrength = originalCohesion * 3f; // 5f → 3f로 완화
         }
 
-        // 3. 수축 대기
         yield return new WaitForSeconds(transitionDuration * 0.4f);
-
-        // 4. 페이드 아웃 (HUDController 완성 후 주석 해제)
-        // HUDController.Instance?.FadeOut(0.3f);
         yield return new WaitForSeconds(transitionDuration * 0.3f);
 
-        // 5. 챔버 교체
-        // [수정 1 연계] currentChamber를 그대로 전달
-        // GameManager.OnChamberCleared(1) → LoadChamber(2)
         GameManager.Instance.OnChamberCleared(currentChamber);
 
-        // 6. 챔버 로드 대기
         yield return new WaitForSeconds(transitionDuration * 0.2f);
 
-        // 7. cohesionStrength 복구
-        // [수정 3] 복구 시점에 pps가 여전히 유효한지 확인 후 복구
-        // 챔버 교체 후 pps 오브젝트가 Destroy될 수도 있기 때문
         if (pps != null)
             pps.cohesionStrength = originalCohesion;
-
-        // 8. 페이드 인 (HUDController 완성 후 주석 해제)
-        // HUDController.Instance?.FadeIn(0.3f);
 
         isTransitioning = false;
     }

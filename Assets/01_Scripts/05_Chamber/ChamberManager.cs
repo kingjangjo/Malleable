@@ -22,7 +22,9 @@ public class ChamberManager : MonoBehaviour
     // 해결: Awake()는 Start()보다 항상 먼저 실행되므로 여기서 캐싱
     //       GameManager.Start() → ChamberManager.LoadChamber()가 불려도 이미 준비된 상태
     private PlayerParticleSystem cachedPPS;
-    private PlayerFormController cachedFormController;
+    private PlayerFormController cachedFormController; 
+    private GameObject preloadedInstance;
+    private int preloadedIndex = -1;
 
     void Awake()
     {
@@ -36,6 +38,14 @@ public class ChamberManager : MonoBehaviour
         if (cachedPPS == null)
             Debug.LogWarning("ChamberManager: PlayerParticleSystem을 찾지 못했습니다.");
     }
+    public void PreloadNextChamber(int n)
+    {
+        int index = n - 1;
+        if (index < 0 || index >= chamberPrefabs.Length) return;
+        if (preloadedIndex == index) return; // 이미 프리로드됨
+
+        StartCoroutine(PreloadRoutine(index));
+    }
 
     // ── 챔버 로드 ──────────────────────────────────────────────────
 
@@ -43,37 +53,56 @@ public class ChamberManager : MonoBehaviour
     {
         StartCoroutine(LoadChamberRoutine(n));
     }
+    IEnumerator PreloadRoutine(int index)
+    {
+        yield return null; // 한 프레임 대기 (현재 프레임 부하 분산)
+
+        // 플레이어에게 안 보이는 먼 위치에 생성
+        // → Start()가 즉시 실행되지만 플레이어와 멀어서 영향 없음
+        preloadedInstance = Instantiate(
+            chamberPrefabs[index],
+            new Vector3(0f, -2000f, 0f), // 맵 아래 멀리
+            Quaternion.identity
+        );
+        preloadedIndex = index;
+
+        Debug.Log($"챔버 {index + 1} 프리로드 완료");
+    }
+
 
     IEnumerator LoadChamberRoutine(int n)
     {
         int index = n - 1;
         if (index < 0 || index >= chamberPrefabs.Length)
         {
-            if (index >= chamberPrefabs.Length)
-                Debug.Log("모든 챔버를 클리어했습니다!");
-            else
-                Debug.LogWarning($"Chamber {n} 프리팹이 없습니다.");
+            if (index >= chamberPrefabs.Length) Debug.Log("모든 챔버 클리어!");
             yield break;
         }
 
         GameManager.Instance.LockInput(0.8f);
 
-        // 기존 챔버 제거
         if (currentChamberInstance != null)
             Destroy(currentChamberInstance);
 
-        yield return null; // Destroy 반영 대기
+        yield return null;
 
-        // 새 챔버 생성
-        currentChamberInstance = Instantiate(chamberPrefabs[index]);
-
-        // [수정] SpawnPoint를 챔버 인스턴스 하위에서만 탐색
-        // 이유: FindWithTag는 씬 전체를 뒤져서 이전 챔버 잔재와 혼동될 수 있음
-        SpawnPoint sp = currentChamberInstance.GetComponentInChildren<SpawnPoint>();
-        if (sp != null)
-            currentSpawnPoint = sp.transform;
+        // 프리로드된 챔버가 있으면 재사용 — Instantiate 스파이크 없음
+        if (preloadedInstance != null && preloadedIndex == index)
+        {
+            currentChamberInstance = preloadedInstance;
+            currentChamberInstance.transform.position = Vector3.zero; // 원위치
+            preloadedInstance = null;
+            preloadedIndex = -1;
+        }
         else
-            Debug.LogWarning($"Chamber {n}: SpawnPoint 컴포넌트를 찾지 못했습니다.");
+        {
+            // 프리로드 없으면 기존 방식 (fallback)
+            currentChamberInstance = Instantiate(chamberPrefabs[index]);
+        }
+
+        SpawnPoint sp = currentChamberInstance.GetComponentInChildren<SpawnPoint>();
+        if (sp != null) currentSpawnPoint = sp.transform;
+        else Debug.LogWarning($"Chamber {n}: SpawnPoint 없음");
 
         RespawnPlayer();
         GameManager.Instance.StartChamber(n);

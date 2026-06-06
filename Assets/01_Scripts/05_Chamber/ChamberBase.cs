@@ -60,10 +60,11 @@ public abstract class ChamberBase : MonoBehaviour
 
         Debug.Log($"Chamber {chamberNumber} 클리어!");
 
-        if (exitDoor != null)
-            exitDoor.Unlock();
-        else
-            Debug.LogWarning($"Chamber {chamberNumber}: exitDoor가 연결되지 않았습니다.");
+        if (exitDoor != null) exitDoor.Unlock();
+
+        // 다음 챔버 프리로드 시작 (문 열리는 동안 백그라운드에서 생성)
+        if (ChamberManager.Instance != null)
+            ChamberManager.Instance.PreloadNextChamber(chamberNumber + 1);
 
         OnCleared?.Invoke();
     }
