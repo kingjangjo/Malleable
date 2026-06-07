@@ -25,7 +25,7 @@ public class PlayerIconUI : MonoBehaviour
             icon.sprite = humanoid;
             iconBack.sprite = humanoid;
             icon.fillAmount = pfc.sizeIndex/ (float)500.0f;
-            percentText.text = Mathf.RoundToInt((pfc.sizeIndex / 500.0f) * 100).ToString() + "%";
+            percentText.text = "";
         }
     }
 }

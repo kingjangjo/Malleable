@@ -2105,7 +2105,7 @@ MonoBehaviour:
   - languageCode: EN
     fontAsset: {fileID: 11400000, guid: 428261a2c9ac94f48a8eeb0b3c160e5a, type: 2}
   - languageCode: JP
-    fontAsset: {fileID: 11400000, guid: eb3effe94a90d80429c464753501aa9c, type: 2}
+    fontAsset: {fileID: 11400000, guid: bc137f6dc92d3aa4fa953a4fe765dd20, type: 2}
 --- !u!1 &376201173
 GameObject:
   m_ObjectHideFlags: 0
@@ -5315,7 +5315,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1054073860
 MonoBehaviour:
@@ -5403,7 +5403,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: -18.265015, z: 0, w: -22.179016}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -6827,9 +6827,6 @@ MonoBehaviour:
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: Japanese
-      m_Image: {fileID: 0}
-      m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: Chinese
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
