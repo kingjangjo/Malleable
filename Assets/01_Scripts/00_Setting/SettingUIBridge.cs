@@ -51,7 +51,10 @@ public class SettingUIBridge : MonoBehaviour
     {
         // 해상도 드롭다운 인덱스에 따라 분기 처리 예시
         int width = 1920; int height = 1080;
-        if (resolutionDropdown.value == 1) { width = 1280; height = 720; }
+        if (resolutionDropdown.value == 1) { width = 2560; height = 1440; }
+        else if (resolutionDropdown.value == 2) { width = 3840; height = 2160; }
+        else if (resolutionDropdown.value == 3) { width = 1280; height = 720; }
+        else if (resolutionDropdown.value == 4) { width = 2880; height = 1800; }
 
         // FPS 드롭다운 인덱스 분기 처리 예시
         int fps = 60;
@@ -65,7 +68,7 @@ public class SettingUIBridge : MonoBehaviour
     {
         string code = "KO";
         if (languageDropdown.value == 1) code = "EN";
-        else if (languageDropdown.value == 2) code = "JA";
+        else if (languageDropdown.value == 2) code = "JP";
 
         SettingManager.Instance.UpdateLanguage(code);
     }

@@ -590,6 +590,17 @@ public class PlayerParticleSystem : MonoBehaviour
             particles.Add(p);
         }
     }
+    public void ClearParticles()
+    {
+        int removeCount = 0;
+        for (int i = particles.Count - 1; i >= 0; i--)
+        {
+            var p = particles[i];
+            particles.Remove(p);
+            removeCount++;
+        }
+        Debug.Log("삭제 완료");
+    }
 
     void OnDrawGizmos()
     {

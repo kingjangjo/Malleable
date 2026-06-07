@@ -4,28 +4,15 @@ using System.Collections;
 public class ChamberPipe : MonoBehaviour
 {
     [Header("Settings")]
-    // [수정 1] nextChamber → currentChamber로 이름 변경
-    // 기존: nextChamber라고 이름 붙여놓고 OnChamberCleared(nextChamber - 1) 호출
-    //       → Inspector에서 "2" 입력 시 OnChamberCleared(1) 전달
-    //       → GameManager는 1+1=2번 챔버 로드 → 맞긴 하지만 헷갈리는 구조
-    // 수정: "이 파이프가 속한 챔버 번호"를 입력하도록 변경
-    //       ex) 챔버 1의 파이프면 currentChamber = 1
-    //       OnChamberCleared(1) → GameManager가 2번 챔버 로드
-    [Tooltip("이 파이프가 속한 챔버 번호. 챔버 1이면 1, 챔버 2면 2를 입력.")]
+    [Tooltip("이 파이프가 속한 챔버 번호. 챔버 1이면 1을 입력.")]
     public int currentChamber;
     public KeyCode enterKey = KeyCode.F;
-    public float transitionDuration = 2.0f;
 
     [Header("Prompt")]
     public GameObject promptUI;
 
     private bool playerNearby = false;
     private bool isTransitioning = false;
-
-    // [수정 2] PlayerParticleSystem 캐싱
-    // 기존: PipeTransition() 코루틴 안에서 매번 FindWithTag → GetComponentInChildren
-    //       → PlayerParticle이 Player 하위가 아니어서 pps가 항상 null
-    // 수정: Start()에서 FindObjectOfType으로 한 번만 찾아 캐싱
     private PlayerParticleSystem cachedPPS;
 
     void Start()
@@ -35,72 +22,58 @@ public class ChamberPipe : MonoBehaviour
             Debug.LogWarning("ChamberPipe: PlayerParticleSystem을 찾지 못했습니다.");
     }
 
-    // ── 파이프 앞 진입/이탈 감지 ─────────────────────────────────
+    // ── 파이프 앞 진입/이탈 ──────────────────────────────────────
 
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("SoulCore")) return;
-
         playerNearby = true;
-
-        if (promptUI != null)
-            promptUI.SetActive(true);
+        if (promptUI != null) promptUI.SetActive(true);
     }
 
     void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("SoulCore")) return;
-
         playerNearby = false;
-
-        if (promptUI != null)
-            promptUI.SetActive(false);
+        if (promptUI != null) promptUI.SetActive(false);
     }
 
-    // ── 키 입력 감지 ─────────────────────────────────────────────
+    // ── F키 감지 ─────────────────────────────────────────────────
 
     void Update()
     {
         if (isTransitioning) return;
         if (!playerNearby) return;
         if (GameManager.Instance.inputLocked) return;
-
         if (Input.GetKeyDown(enterKey))
             StartCoroutine(PipeTransition());
     }
 
-    // ── 파이프 전환 연출 ─────────────────────────────────────────
+    // ── 파이프 전환 ───────────────────────────────────────────────
 
     IEnumerator PipeTransition()
     {
         isTransitioning = true;
-        GameManager.Instance.LockInput(transitionDuration);
-
         if (promptUI != null) promptUI.SetActive(false);
 
-        PlayerParticleSystem pps = cachedPPS;
+        // 입력 잠금 (SpawnPipe의 FadeIn이 끝난 뒤 해제)
+        GameManager.Instance.inputLocked = true;
 
-        // [제거] SetSoul 호출 삭제 — SpawnPipe가 다음 챔버에서 처리함
-        // 이전: pps.SetSoul(pps.particles.Count > 0 ? pps.particles.Count : 200);
+        // ① 페이드 아웃 — 화면이 검어지면서 전환 시작
+        if (ScreenFader.Instance != null)
+            yield return StartCoroutine(ScreenFader.Instance.FadeOut(0.4f));
+        else
+            yield return new WaitForSeconds(0.4f); // ScreenFader 없을 때 fallback
 
-        // 수축 연출만 유지 (cohesion은 입자 재스폰 없이 기존 입자를 뭉치게만 함)
-        float originalCohesion = 0f;
-        if (pps != null)
-        {
-            originalCohesion = pps.cohesionStrength;
-            pps.cohesionStrength = originalCohesion * 3f; // 5f → 3f로 완화
-        }
-
-        yield return new WaitForSeconds(transitionDuration * 0.4f);
-        yield return new WaitForSeconds(transitionDuration * 0.3f);
-
+        // ② 챔버 교체 요청
+        //    → SaveProgress → ChamberManager.LoadChamber
+        //      → Destroy(현재챔버) → SetActive(true) → RespawnPlayer
+        //      → SpawnPipe.Start() → SpawnRoutine() 시작 (이후 처리를 SpawnPipe에 위임)
+        //    모든 작업이 검은 화면 뒤에서 처리됨.
+        //    프레임 드랍 / 파티클 이동 모두 안 보임.
         GameManager.Instance.OnChamberCleared(currentChamber);
 
-        yield return new WaitForSeconds(transitionDuration * 0.2f);
-
-        if (pps != null)
-            pps.cohesionStrength = originalCohesion;
-
+        // ③ 이 코루틴 종료. 이후 FadeIn + inputLocked 해제는 SpawnPipe 담당.
         isTransitioning = false;
     }
 }

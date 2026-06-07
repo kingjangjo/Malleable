@@ -36,16 +36,15 @@ public abstract class ChamberBase : MonoBehaviour
         if (!isCleared) CheckClearConditions();
     }
 
+    // ChamberBase.cs 수정
     void CheckClearConditions()
     {
-        // 리스트가 비어있으면 체크 안 함
-        // → 자식 클래스가 TriggerClear()를 직접 호출해야 함
         if (clearConditions.Count == 0) return;
 
         foreach (var condition in clearConditions)
         {
-            if (condition == null) continue;
-            if (!condition.IsSatisfied) return;
+            // null = 연결 안 됨 = 미충족으로 처리 (continue 대신 return)
+            if (condition == null || !condition.IsSatisfied) return;
         }
         TriggerClear();
     }
@@ -64,7 +63,7 @@ public abstract class ChamberBase : MonoBehaviour
 
         // 다음 챔버 프리로드 시작 (문 열리는 동안 백그라운드에서 생성)
         if (ChamberManager.Instance != null)
-            ChamberManager.Instance.PreloadNextChamber(chamberNumber + 1);
+            ChamberManager.Instance.PreloadNextChamber(chamberNumber + 1);  
 
         OnCleared?.Invoke();
     }

@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
         // [수정 1] Start()에서 직접 LoadChamber를 호출하도록 변경
         // 기존: StartChamber(currentChamber) → 이벤트만 발사하고 챔버를 실제로 로드하지 않았음
         // 수정: ChamberManager.LoadChamber()를 호출해서 챔버 프리팹을 실제로 씬에 올림
+        currentChamber = 1; // 항상 1부터 시작하도록 강제 (저장된 값 무시)
         if (ChamberManager.Instance != null)
             ChamberManager.Instance.LoadChamber(currentChamber);
         else
@@ -77,7 +78,12 @@ public class GameManager : MonoBehaviour
         Invoke(nameof(UnlockInput), seconds);
     }
 
-    void UnlockInput() => inputLocked = false;
+    // SpawnPipe에서 직접 호출 가능하도록 public으로 변경
+    public void UnlockInput()
+    {
+        CancelInvoke(nameof(UnlockInput));  // LockInput의 예약된 자동 해제 취소
+        inputLocked = false;
+    }
 
     // ── 저장 / 불러오기 ──────────────────────────────────────────
 

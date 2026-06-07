@@ -174,9 +174,11 @@ public class LocalizationManager : MonoBehaviour
 
     public string GetLocalizedString(string id)
     {
+        Debug.Log($"[LocalizationManager] GetLocalizedString 호출: ID='{id}'");
         if (string.IsNullOrEmpty(id)) return "";
 
         string currentLang = SettingManager.Instance.CurrentData.languageCode;
+        Debug.Log($"[LocalizationManager] 현재 언어: '{currentLang}'");
 
         if (localizedTable.TryGetValue(id, out var langMap))
         {

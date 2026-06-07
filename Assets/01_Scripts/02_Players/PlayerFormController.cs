@@ -16,7 +16,7 @@ public class PlayerFormController : MonoBehaviour
     public GameObject soulForm;
 
     [Header("콜라이더")]
-    public CapsuleCollider humanoidCollider;
+    public BoxCollider humanoidCollider;
     public SphereCollider soulCollider;
 
     [Header("카메라")]
@@ -53,6 +53,7 @@ public class PlayerFormController : MonoBehaviour
         var targetConfig = cCam.Target;
         if(currentForm == PlayerForm.Humanoid)
         {
+            this.gameObject.GetComponent<Rigidbody>().mass = 1;
             currentForm = PlayerForm.Soul;
             humanoidForm.SetActive(false);
             soulForm.SetActive(true);
@@ -65,6 +66,7 @@ public class PlayerFormController : MonoBehaviour
         }
         else
         {
+            this.gameObject.GetComponent<Rigidbody>().mass = 4;
             currentForm = PlayerForm.Humanoid;
             humanoidForm.SetActive(true);
             soulForm.SetActive(false);
@@ -73,8 +75,11 @@ public class PlayerFormController : MonoBehaviour
             sizeIndex += pps.SetHumanoid();
             if(sizeIndex > 100)
             {
-                humanoidForm.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f) * (1 + sizeIndex) * 1.0f / 250.0f;
+                float size = (1 + sizeIndex) * 1.0f / 250.0f;
+                humanoidForm.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f) * size;
                 //humanoidCollider.height = 1.7f * sizeIndex * 1.0f / 250.0f;
+                humanoidCollider.size = new Vector3(1.0f, 1.0f, 1.0f) * size;
+                this.transform.position = this.transform.position + new Vector3(0, size/2, 0);
             }
             targetConfig.TrackingTarget = humanoidTrackingTarget.transform;
             cCam.Target = targetConfig;
