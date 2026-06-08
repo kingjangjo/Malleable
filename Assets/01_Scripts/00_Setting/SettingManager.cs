@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 
 public class SettingManager : MonoBehaviour
@@ -13,7 +14,8 @@ public class SettingManager : MonoBehaviour
     // 설정 변경을 하위 모듈에 알릴 이벤트들
     public event Action OnAudioSettingsChanged;
     public event Action OnVideoSettingsChanged;
-    public event Action OnLocalizationChanged;
+    public event Action OnLocalizationChanged; 
+    [SerializeField] private AudioMixer mainMixer;
 
     private string saveFilePath;
 
@@ -80,7 +82,25 @@ public class SettingManager : MonoBehaviour
         CurrentData.masterVolume = master;
         CurrentData.sfxVolume = sfx;
         CurrentData.bgmVolume = bgm;
-        OnAudioSettingsChanged?.Invoke();
+        OnAudioSettingsChanged?.Invoke();// 각각의 오디오 믹서 파라미터 제어
+        SetMixerVolume("Master_Volume", master);
+        SetMixerVolume("SFX_Volume", sfx);
+        SetMixerVolume("BGM_Volume", bgm);
+
+        // (선택사항) 나중에 게임을 다시 켰을 때를 위해 값을 저장해둡니다.
+        PlayerPrefs.SetFloat("Master_Vol_Key", master);
+        PlayerPrefs.SetFloat("SFX_Vol_Key", sfx);
+        PlayerPrefs.SetFloat("BGM_Vol_Key", bgm);
+    }
+    private void SetMixerVolume(string parameterName, float sliderValue)
+    {
+        if (mainMixer == null) return;
+
+        // 슬라이더 값이 0일 때는 소리를 완전히 끄기 위해 -80dB로 설정
+        // 그 외의 값은 로그 함수를 이용해 자연스러운 볼륨 곡선으로 변환
+        float volume = sliderValue <= 0 ? -80f : Mathf.Log10(sliderValue) * 20f;
+
+        mainMixer.SetFloat(parameterName, volume);
     }
 
     public void UpdateVideoSettings(int width, int height, int fullScreenIdx, int fps)

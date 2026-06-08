@@ -51,6 +51,10 @@ public class EffectLayerRendererFeature : ScriptableRendererFeature
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         if (settings.effectRenderTexture == null) return;
+
+        // ★ 게임 카메라에서만 패스 실행 (섀도우·반사·에디터 씬 카메라 제외)
+        if (renderingData.cameraData.camera.cameraType != CameraType.Game) return;
+
         renderer.EnqueuePass(_pass);
     }
 
@@ -171,25 +175,23 @@ class EffectLayerPass : ScriptableRenderPass
         var colorTarget = renderGraph.ImportTexture(_effectColorRT);
 
         using (var builder = renderGraph.AddRasterRenderPass<PassData>(
-                   "EffectLayerPass", out var passData))
+           "EffectLayerPass", out var passData))
         {
             passData.requests = requests;
 
             builder.SetRenderAttachment(colorTarget, 0, AccessFlags.Write);
 
-            // 깊이 버퍼는 입자가 있을 때만 읽도록 안전장치 처리 (선택사항)
-            if (requests.Count > 0)
-            {
-                builder.SetRenderAttachmentDepth(
-                    resourceData.activeDepthTexture, AccessFlags.Read);
-            }
+            // ★ 이 블록 전체 제거 (바닥과 depth 충돌 원인)
+            // if (requests.Count > 0)
+            // {
+            //     builder.SetRenderAttachmentDepth(
+            //         resourceData.activeDepthTexture, AccessFlags.Read);
+            // }
 
             builder.SetRenderFunc((PassData data, RasterGraphContext ctx) =>
             {
-                // 입자가 있든 없든, 매 프레임 도화지를 투명하게 완전히 지웁니다.
                 ctx.cmd.ClearRenderTarget(false, true, Color.clear);
 
-                // 입자가 존재할 때만 드로우 명령 수행
                 if (data.requests != null && data.requests.Count > 0)
                 {
                     foreach (var req in data.requests)

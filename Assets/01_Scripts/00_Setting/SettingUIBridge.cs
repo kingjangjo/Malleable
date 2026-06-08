@@ -39,7 +39,7 @@ public class SettingUIBridge : MonoBehaviour
         languageDropdown.onValueChanged.AddListener(index => OnLanguageDropdownChanged()); 
         if (data.languageCode == "KO") languageDropdown.value = 0;
         else if (data.languageCode == "EN") languageDropdown.value = 1;
-        else if (data.languageCode == "JA") languageDropdown.value = 2;
+        else if (data.languageCode == "JP") languageDropdown.value = 2;
     }
 
     private void OnAudioSliderChanged()

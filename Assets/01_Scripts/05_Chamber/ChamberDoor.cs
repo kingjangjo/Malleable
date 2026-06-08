@@ -11,6 +11,17 @@ public class ChamberDoor : MonoBehaviour
     [Tooltip("문 너머 Transition Room — 잠겨있을 때 비활성화")]
     public GameObject transitionRoom;
 
+    public AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    public void PlayAudioSource()
+    {
+        audioSource.Play();
+    }
     // ── 문 열기 ──────────────────────────────────────────────────
 
     public void Unlock()

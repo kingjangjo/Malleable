@@ -4909,6 +4909,7 @@ MonoBehaviour:
   isLocked: 1
   anim: {fileID: 8686155576267031274}
   transitionRoom: {fileID: 8332431111294137756}
+  audioSource: {fileID: 0}
 --- !u!95 &8686155576267031274
 Animator:
   serializedVersion: 7
@@ -4942,7 +4943,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 5131961938846099171, guid: 09a83beb9ab8fc14db38e15e14a213bc, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 98e99a45d7f3c4a409c251d66f3e9673, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

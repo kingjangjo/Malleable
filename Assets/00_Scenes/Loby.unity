@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 56951580}
   - component: {fileID: 56951582}
   - component: {fileID: 56951581}
+  - component: {fileID: 56951583}
   m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
@@ -473,6 +474,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 56951579}
   m_CullTransparentMesh: 1
+--- !u!114 &56951583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56951579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: BgmVolume
 --- !u!224 &139409922 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4456069595014640311, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
@@ -489,6 +503,7 @@ GameObject:
   - component: {fileID: 150338145}
   - component: {fileID: 150338147}
   - component: {fileID: 150338146}
+  - component: {fileID: 150338148}
   m_Layer: 5
   m_Name: Text (TMP) (2)
   m_TagString: Untagged
@@ -615,6 +630,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150338144}
   m_CullTransparentMesh: 1
+--- !u!114 &150338148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150338144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: FPS Cap
 --- !u!1 &182941208
 GameObject:
   m_ObjectHideFlags: 0
@@ -1383,6 +1411,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545423833}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PressButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5152582795161267439, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_text
       value: FormChange
@@ -1685,6 +1741,7 @@ GameObject:
   - component: {fileID: 301349911}
   - component: {fileID: 301349913}
   - component: {fileID: 301349912}
+  - component: {fileID: 301349914}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1811,6 +1868,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301349910}
   m_CullTransparentMesh: 1
+--- !u!114 &301349914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301349910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: Resoultion
 --- !u!1 &301709391
 GameObject:
   m_ObjectHideFlags: 0
@@ -2776,6 +2846,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1545423833}
+        m_TargetAssemblyTypeName: PressButton, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 230842088}
         m_TargetAssemblyTypeName: ButtonSkills, Assembly-CSharp
         m_MethodName: SceneChange
@@ -2933,6 +3015,7 @@ GameObject:
   - component: {fileID: 565167803}
   - component: {fileID: 565167805}
   - component: {fileID: 565167804}
+  - component: {fileID: 565167806}
   m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
@@ -3059,6 +3142,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 565167802}
   m_CullTransparentMesh: 1
+--- !u!114 &565167806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 565167802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: Graphic
 --- !u!1 &599930414
 GameObject:
   m_ObjectHideFlags: 0
@@ -3145,6 +3241,7 @@ GameObject:
   - component: {fileID: 609302173}
   - component: {fileID: 609302175}
   - component: {fileID: 609302174}
+  - component: {fileID: 609302176}
   m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
@@ -3271,6 +3368,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 609302172}
   m_CullTransparentMesh: 1
+--- !u!114 &609302176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609302172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: ScreenMode
 --- !u!1001 &613947957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3955,6 +4065,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingManager
   inputActions: {fileID: -944628639613478452, guid: 04503846a666e6b48b91e7ab17163996, type: 3}
+  mainMixer: {fileID: 24100000, guid: 09a83beb9ab8fc14db38e15e14a213bc, type: 2}
 --- !u!1 &750384217
 GameObject:
   m_ObjectHideFlags: 0
@@ -3966,6 +4077,7 @@ GameObject:
   - component: {fileID: 750384218}
   - component: {fileID: 750384220}
   - component: {fileID: 750384219}
+  - component: {fileID: 750384221}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -4094,6 +4206,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750384217}
   m_CullTransparentMesh: 1
+--- !u!114 &750384221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 750384217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: Audio
 --- !u!1 &783211724
 GameObject:
   m_ObjectHideFlags: 0
@@ -4538,6 +4663,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 732083502}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: LoadSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
       - m_Target: {fileID: 1749559761}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -4550,9 +4687,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 732083502}
-        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
-        m_MethodName: LoadSettings
+      - m_Target: {fileID: 1545423833}
+        m_TargetAssemblyTypeName: PressButton, Assembly-CSharp
+        m_MethodName: PlaySound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4595,6 +4732,7 @@ GameObject:
   - component: {fileID: 859244059}
   - component: {fileID: 859244061}
   - component: {fileID: 859244060}
+  - component: {fileID: 859244062}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -4721,6 +4859,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 859244058}
   m_CullTransparentMesh: 1
+--- !u!114 &859244062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859244058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: Language
 --- !u!1001 &883627457
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4812,6 +4963,34 @@ PrefabInstance:
     - target: {fileID: 4456069595014640311, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545423833}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PressButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5152582795161267439, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_text
@@ -5703,6 +5882,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545423833}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PressButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5152582795161267439, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_text
       value: cohesion
@@ -5946,6 +6153,7 @@ Transform:
   - {fileID: 732083501}
   - {fileID: 1156654897}
   - {fileID: 369436319}
+  - {fileID: 1545423832}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1201893338
@@ -6303,10 +6511,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1304191497}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1545423833}
+        m_TargetAssemblyTypeName: PressButton, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6350,6 +6558,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1304191497}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1246625735
 GameObject:
@@ -6668,7 +6888,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1304191498
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7324,10 +7544,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1304191497}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1545423833}
+        m_TargetAssemblyTypeName: PressButton, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7361,6 +7581,18 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 1301894587}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1304191497}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -7720,7 +7952,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1475380399
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7976,6 +8208,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545423833}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PressButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5152582795161267439, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_text
       value: cohesion
@@ -8140,6 +8400,149 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1545423831
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1545423832}
+  - component: {fileID: 1545423833}
+  - component: {fileID: 1545423834}
+  m_Layer: 0
+  m_Name: PressButtonSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1545423832
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1545423831}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1195244562}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1545423833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1545423831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 892bc06fe95d7ee45bf1530fc5d6b8a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PressButton
+  audioSource: {fileID: 1545423834}
+--- !u!82 &1545423834
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1545423831}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 5131961938846099171, guid: 09a83beb9ab8fc14db38e15e14a213bc, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: eb53eb6784d45454fb2339e1def40975, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &1550557837
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8371,6 +8774,34 @@ PrefabInstance:
     - target: {fileID: 4456069595014640311, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545423833}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PressButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5152582795161267439, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_text
@@ -8726,6 +9157,7 @@ GameObject:
   - component: {fileID: 1651680389}
   - component: {fileID: 1651680391}
   - component: {fileID: 1651680390}
+  - component: {fileID: 1651680392}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -8852,6 +9284,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651680388}
   m_CullTransparentMesh: 1
+--- !u!114 &1651680392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651680388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: MasterVolume
 --- !u!1 &1655051196
 GameObject:
   m_ObjectHideFlags: 0
@@ -9440,10 +9885,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1304191497}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1545423833}
+        m_TargetAssemblyTypeName: PressButton, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9477,6 +9922,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1301894587}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1304191497}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -10042,10 +10499,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1749559761}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1545423833}
+        m_TargetAssemblyTypeName: PressButton, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -10070,6 +10527,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
         m_MethodName: LoadSettings
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1749559761}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -10179,6 +10648,7 @@ GameObject:
   - component: {fileID: 1835636470}
   - component: {fileID: 1835636472}
   - component: {fileID: 1835636471}
+  - component: {fileID: 1835636473}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -10305,6 +10775,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1835636469}
   m_CullTransparentMesh: 1
+--- !u!114 &1835636473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835636469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: Setting
 --- !u!1 &1867610442
 GameObject:
   m_ObjectHideFlags: 0
@@ -10543,6 +11026,7 @@ GameObject:
   - component: {fileID: 1892080743}
   - component: {fileID: 1892080745}
   - component: {fileID: 1892080744}
+  - component: {fileID: 1892080746}
   m_Layer: 5
   m_Name: Text (TMP) (3)
   m_TagString: Untagged
@@ -10669,6 +11153,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1892080742}
   m_CullTransparentMesh: 1
+--- !u!114 &1892080746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892080742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: GamePlay
 --- !u!1 &1906996507
 GameObject:
   m_ObjectHideFlags: 0
@@ -10680,6 +11177,7 @@ GameObject:
   - component: {fileID: 1906996508}
   - component: {fileID: 1906996510}
   - component: {fileID: 1906996509}
+  - component: {fileID: 1906996511}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -10806,6 +11304,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1906996507}
   m_CullTransparentMesh: 1
+--- !u!114 &1906996511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1906996507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: Quit
 --- !u!1 &1938146665
 GameObject:
   m_ObjectHideFlags: 0
@@ -11110,10 +11621,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1304191497}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1545423833}
+        m_TargetAssemblyTypeName: PressButton, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11157,6 +11668,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1304191497}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!1 &1963540619
 GameObject:
@@ -11334,6 +11857,7 @@ GameObject:
   - component: {fileID: 2006947884}
   - component: {fileID: 2006947886}
   - component: {fileID: 2006947885}
+  - component: {fileID: 2006947887}
   m_Layer: 5
   m_Name: Text (TMP) (2)
   m_TagString: Untagged
@@ -11460,6 +11984,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006947883}
   m_CullTransparentMesh: 1
+--- !u!114 &2006947887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006947883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: EffectVolume
 --- !u!1001 &2010742174
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11551,6 +12088,34 @@ PrefabInstance:
     - target: {fileID: 4456069595014640311, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545423833}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PressButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5152582795161267439, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_text
@@ -11769,6 +12334,7 @@ GameObject:
   - component: {fileID: 2040639670}
   - component: {fileID: 2040639672}
   - component: {fileID: 2040639671}
+  - component: {fileID: 2040639673}
   m_Layer: 5
   m_Name: Text (TMP) (2)
   m_TagString: Untagged
@@ -11895,6 +12461,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2040639669}
   m_CullTransparentMesh: 1
+--- !u!114 &2040639673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2040639669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295c12b948c87c44188533c9036b1990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizeTextMeshPro
+  localizationTextId: Control
 --- !u!1 &2058950988
 GameObject:
   m_ObjectHideFlags: 0
@@ -12017,6 +12596,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1545423833}
+        m_TargetAssemblyTypeName: PressButton, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 230842088}
         m_TargetAssemblyTypeName: ButtonSkills, Assembly-CSharp
         m_MethodName: QuitGame
@@ -12213,6 +12804,34 @@ PrefabInstance:
     - target: {fileID: 4456069595014640311, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1545423833}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PlaySound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PressButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4776825039560602596, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5152582795161267439, guid: d2d26cc5f4f0b0d42a7248eeacdb3bf4, type: 3}
       propertyPath: m_TextWrappingMode

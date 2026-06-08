@@ -8770,6 +8770,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExitDoor
       objectReference: {fileID: 0}
+    - target: {fileID: 6968870014261436511, guid: 878ce8a3326e89e4f9a0c9f1f0b65d9c, type: 3}
+      propertyPath: m_Size.y
+      value: 0.2415309
+      objectReference: {fileID: 0}
+    - target: {fileID: 6968870014261436511, guid: 878ce8a3326e89e4f9a0c9f1f0b65d9c, type: 3}
+      propertyPath: m_Center.y
+      value: -1.0661523
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8809,6 +8817,7 @@ MonoBehaviour:
   isLocked: 1
   anim: {fileID: 1389737873278551997}
   transitionRoom: {fileID: 8128190737372258841}
+  audioSource: {fileID: 0}
 --- !u!95 &1389737873278551997
 Animator:
   serializedVersion: 7
@@ -8842,7 +8851,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 5131961938846099171, guid: 09a83beb9ab8fc14db38e15e14a213bc, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 98e99a45d7f3c4a409c251d66f3e9673, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

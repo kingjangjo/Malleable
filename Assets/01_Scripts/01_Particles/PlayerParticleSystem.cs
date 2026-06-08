@@ -103,7 +103,8 @@ public class PlayerParticleSystem : MonoBehaviour
 
     void OnBeginCamera(ScriptableRenderContext context, Camera camera)
     {
-        //if (camera.name != "MainCamera") return;
+        // ★ 게임 카메라에서만 RegisterDraw 호출
+        if (camera.cameraType != CameraType.Game) return;
         RenderParticles(camera);
     }
 
