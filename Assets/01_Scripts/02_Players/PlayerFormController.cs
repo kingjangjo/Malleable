@@ -26,13 +26,13 @@ public class PlayerFormController : MonoBehaviour
 
     public PlayerForm currentForm { get; private set; } = PlayerForm.Soul;
 
-    private InputSystem_Actions _controls;
+    private PlayerInputSystem controls;
 
     public int sizeIndex = 0;
 
-    void Awake() => _controls = new InputSystem_Actions();
-    void OnEnable() => _controls.Enable();
-    void OnDisable() => _controls.Disable();
+    void Awake() => controls = new PlayerInputSystem();
+    void OnEnable() => controls.Enable();
+    void OnDisable() => controls.Disable();
     public SoulCore playerData;
     public PlayerParticleSystem pps;
 
@@ -42,8 +42,9 @@ public class PlayerFormController : MonoBehaviour
     }
     private void Update()
     {
-        if (_controls.Player.FormChange.triggered)
+        if (controls.Player.FormChange.triggered)
         {
+            Debug.Log("Form change triggered");
             FormChange();
             playerData.currentForm = this.currentForm;
         }

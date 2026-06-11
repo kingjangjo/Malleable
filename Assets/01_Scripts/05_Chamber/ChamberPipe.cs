@@ -6,7 +6,6 @@ public class ChamberPipe : MonoBehaviour
     [Header("Settings")]
     [Tooltip("이 파이프가 속한 챔버 번호. 챔버 1이면 1을 입력.")]
     public int currentChamber;
-    public KeyCode enterKey = KeyCode.F;
 
     [Header("Prompt")]
     public GameObject promptUI;
@@ -14,6 +13,11 @@ public class ChamberPipe : MonoBehaviour
     private bool playerNearby = false;
     private bool isTransitioning = false;
     private PlayerParticleSystem cachedPPS;
+    private PlayerInputSystem controls;
+
+    void Awake() => controls = new PlayerInputSystem();
+    void OnEnable() => controls.Enable();
+    void OnDisable() => controls.Disable();
 
     void Start()
     {
@@ -45,8 +49,12 @@ public class ChamberPipe : MonoBehaviour
         if (isTransitioning) return;
         if (!playerNearby) return;
         if (GameManager.Instance.inputLocked) return;
-        if (Input.GetKeyDown(enterKey))
+
+        if (controls.Player.Interaction.triggered)
+        {
+            Debug.Log("Interaction triggered");
             StartCoroutine(PipeTransition());
+        }
     }
 
     // ── 파이프 전환 ───────────────────────────────────────────────

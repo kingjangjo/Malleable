@@ -16,6 +16,7 @@ public class SettingManager : MonoBehaviour
     public event Action OnVideoSettingsChanged;
     public event Action OnLocalizationChanged; 
     [SerializeField] private AudioMixer mainMixer;
+    public GameObject settingUI;
 
     private string saveFilePath;
 
@@ -31,6 +32,33 @@ public class SettingManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (settingUI.activeSelf)
+            {
+                // 설정창 닫기
+                settingUI.SetActive(false);        // ✅ false로 닫음
+                Time.timeScale = 1f;
+                SaveSettings();
+
+                // 커서 원래대로 복구 (게임 중 커서 숨김 상태로)
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                // 설정창 열기
+                settingUI.SetActive(true);         // ✅ true로 열음
+                Time.timeScale = 0f;
+
+                // 커서 보이게 + 화면 안에서 자유롭게 움직이게
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
     }
 
@@ -52,6 +80,7 @@ public class SettingManager : MonoBehaviour
     // JSON 파일 로드
     public void LoadSettings()
     {
+        Time.timeScale = 1;
         if (File.Exists(saveFilePath))
         {
             try
@@ -77,7 +106,7 @@ public class SettingManager : MonoBehaviour
     }
 
     // 데이터 갱신 후 하위 모듈에 전파하는 함수들
-    public void UpdateAudioSettings(float master, float sfx, float bgm)
+    public void UpdateAudioSettings(float master, float bgm, float sfx)
     {
         CurrentData.masterVolume = master;
         CurrentData.sfxVolume = sfx;

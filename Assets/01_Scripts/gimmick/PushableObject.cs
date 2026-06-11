@@ -39,6 +39,24 @@ public class PushableObject : MonoBehaviour
 
         StartPosition = transform.position;
     }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("SoulCore"))
+        {
+            var curForm = collision.gameObject.GetComponent<PlayerFormController>().currentForm;
+            if(curForm == PlayerForm.Soul)
+            {
+                rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ |
+                    RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            }
+            else
+            {
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                if (lockX) rb.constraints |= RigidbodyConstraints.FreezePositionX;
+                if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionZ;
+            }
+        }
+    }
 
     void FixedUpdate()
     {

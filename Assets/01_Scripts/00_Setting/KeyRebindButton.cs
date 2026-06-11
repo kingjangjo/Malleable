@@ -22,7 +22,7 @@ public class KeyRebindButton : MonoBehaviour
         if (actionReference == null) return;
 
         // UI 초기화
-        displayActionText.text = actionReference.action.name;
+        //displayActionText.text = actionReference.action.name;
         UpdateBindingDisplay();
 
         // 버튼 클릭 이벤트 연결

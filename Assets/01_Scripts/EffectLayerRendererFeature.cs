@@ -196,9 +196,13 @@ class EffectLayerPass : ScriptableRenderPass
                 {
                     foreach (var req in data.requests)
                     {
+                        int forwardPassIndex = req.material.FindPass("UniversalForward");
+                        if (forwardPassIndex < 0) forwardPassIndex = 0; // 못 찾으면 0번으로 폴백
+
                         ctx.cmd.DrawMeshInstanced(
                             req.mesh, req.submeshIndex, req.material,
-                            -1, req.matrices, req.count);
+                            0,              // ← -1에서 0으로 변경 (패스 0 = Forward/UniversalForward)
+                            req.matrices, req.count);
                     }
                 }
             });

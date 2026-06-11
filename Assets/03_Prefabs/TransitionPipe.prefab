@@ -108,8 +108,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.7969754, y: 2.8264084, z: 7.1964645}
-  m_Center: {x: 0.057131886, y: -0.0006415844, z: 1.713253}
+  m_Size: {x: 1.084835, y: 1.2245653, z: 7.498299}
+  m_Center: {x: -0.060408592, y: -0.05128014, z: 3.6990836}
 --- !u!114 &5700136079669388234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,7 +124,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChamberPipe
   currentChamber: 1
   enterKey: 102
-  transitionDuration: 2
   promptUI: {fileID: 0}
 --- !u!1 &1184562330953926460
 GameObject:

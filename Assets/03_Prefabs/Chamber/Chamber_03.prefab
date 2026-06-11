@@ -4708,7 +4708,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PushableObject
   lockX: 0
   lockZ: 0
-  mass: 100
+  mass: 1
   drag: 4
   maxSpeed: 2.5
   onFirstMove:
