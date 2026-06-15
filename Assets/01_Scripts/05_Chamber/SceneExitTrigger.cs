@@ -26,7 +26,13 @@ public class SceneExitTrigger : MonoBehaviour
 
         triggered = true;
         end.SetActive(true);
+        StartCoroutine(ToLoby());
         //StartCoroutine(TransitionRoutine());
+    }
+    IEnumerator ToLoby()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("Loby");
     }
 
     IEnumerator TransitionRoutine()

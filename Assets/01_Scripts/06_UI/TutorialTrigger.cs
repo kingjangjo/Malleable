@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 
 /// <summary>
 /// 플레이어(SoulCore)가 영역에 들어오면 TutorialTooltipUI에 안내 문구를 띄우는 트리거 존.

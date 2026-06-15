@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class SettingManager : MonoBehaviour
 {
@@ -20,6 +22,10 @@ public class SettingManager : MonoBehaviour
 
     private string saveFilePath;
 
+    // 인게임(챔버)에서 설정창을 닫았을 때 복구할 마우스 상태.
+    // 로비에서는 항상 마우스가 보여야 하므로 씬별로 다르게 처리한다.
+    private const string LobySceneName = "Loby";
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,14 +34,70 @@ public class SettingManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             saveFilePath = Path.Combine(Application.persistentDataPath, "settings.json");
             LoadSettings();
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
         }
     }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+    }
+
+    private void Start()
+    {
+        // 최초 로드된 씬은 sceneLoaded 이벤트가 발생하기 전이므로 직접 처리
+        RefreshForScene(SceneManager.GetActiveScene());
+    }
+
+    // 씬이 바뀔 때마다 settingUI 참조와 마우스 상태를 새 씬에 맞게 갱신
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        RefreshForScene(scene);
+    }
+
+    private void RefreshForScene(Scene scene)
+    {
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            // 씬 내에 있는 오브젝트인지 확인 (에디터 에셋 제외)
+            if (obj.scene.IsValid() && obj.name == "SETTING")
+            {
+                settingUI = obj;
+            }
+        }
+
+        Time.timeScale = 1f;
+        ApplyDefaultCursorState(scene.name);
+    }
+
+    // 설정창이 닫혀 있을 때의 기본 마우스 상태.
+    // 로비: 항상 보이고 자유롭게 움직임 / 인게임: 잠금 + 숨김
+    private void ApplyDefaultCursorState(string sceneName)
+    {
+        if (sceneName == LobySceneName)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
     private void Update()
     {
+        if (settingUI == null) return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (settingUI.activeSelf)
@@ -45,9 +107,8 @@ public class SettingManager : MonoBehaviour
                 Time.timeScale = 1f;
                 SaveSettings();
 
-                // 커서 원래대로 복구 (게임 중 커서 숨김 상태로)
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                // 커서 상태를 현재 씬에 맞게 복구
+                ApplyDefaultCursorState(SceneManager.GetActiveScene().name);
             }
             else
             {

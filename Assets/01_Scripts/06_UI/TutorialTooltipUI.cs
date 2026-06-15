@@ -55,7 +55,7 @@ public class TutorialTooltipUI : MonoBehaviour
     public void Show(string message, object source = null)
     {
         if (messageText != null) messageText.text = message;
-        currentSource = source;
+            currentSource = source;
         Fade(1f);
 
         if (autoHideRoutine != null) StopCoroutine(autoHideRoutine);

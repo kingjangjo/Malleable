@@ -66,12 +66,6 @@ public class OrbitCamera : MonoBehaviour
 
         transform.position = pivotPos + rotation * new Vector3(0f, 0f, -_currentDistance);
         transform.rotation = rotation;
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
     }
 
     // ★ 추가된 함수: offset 올리기 전에 천장 체크
