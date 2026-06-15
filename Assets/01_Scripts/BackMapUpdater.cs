@@ -26,7 +26,7 @@ public class BackMapUpdater : MonoBehaviour
         // _CameraOpaqueTexture를 직접 가져오는 대신
         // 셰이더에 전역으로 등록된 값을 머티리얼에 복사
         var tex = Shader.GetGlobalTexture(OpaqueTexID);
-        Debug.Log(tex == null ? "null" : $"{tex.width}x{tex.height}");
+        //Debug.Log(tex == null ? "null" : $"{tex.width}x{tex.height}");
 
         if (tex != null && liquidMaterial != null)
             liquidMaterial.SetTexture(BackMapID, tex);

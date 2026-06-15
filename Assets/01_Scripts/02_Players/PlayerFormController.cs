@@ -183,7 +183,7 @@ public class PlayerFormController : MonoBehaviour
             sizeIndex += pps.SetHumanoid();
             if (sizeIndex > 100)
             {
-                float size = (1 + sizeIndex) / 250.0f;
+                float size = (1 + sizeIndex) / 500.0f;
                 humanoidForm.transform.localScale = Vector3.one * size;
                 humanoidCollider.size = Vector3.one * size;
                 transform.position += new Vector3(0, size / 2, 0);
