@@ -4,7 +4,7 @@ public class OrbitCamera : MonoBehaviour
 {
     [Header("타겟")]
     public Transform target;
-    public Vector3 targetOffset = new Vector3(0f, 0.5f, 0f); // 카메라가 바라보는 높이
+    public Vector3 targetOffset = new Vector3(0f, 2.0f, 0f);
 
     [Header("거리")]
     public float distance = 5f;
@@ -20,20 +20,20 @@ public class OrbitCamera : MonoBehaviour
 
     [Header("충돌")]
     public LayerMask collisionLayers;
-    public float cameraRadius = 0.15f;          // 작게 해야 벽에 가까이 붙음
+    public float cameraRadius = 0.15f;
 
     [Header("거리 보간 속도")]
-    public float pullInSpeed = 15f;            // 당겨지는 속도 (빠르게)
-    public float pullOutSpeed = 3f;             // 복귀 속도 (느리게)
+    public float pullInSpeed = 15f;
+    public float pullOutSpeed = 3f;
 
     private float _yaw;
     private float _pitch;
-    private float _currentDistance;            // 실제 현재 거리
+    private float _currentDistance;
 
     void Start()
     {
         _yaw = transform.eulerAngles.y;
-        _pitch = transform.eulerAngles.x;
+        _pitch = 20f; // 살짝 내려다보기
         _currentDistance = distance;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -44,6 +44,7 @@ public class OrbitCamera : MonoBehaviour
     {
         if (target == null) return;
 
+        // 마우스 입력
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSpeedX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSpeedY;
 
@@ -52,61 +53,96 @@ public class OrbitCamera : MonoBehaviour
         _pitch = Mathf.Clamp(_pitch, minVerticalAngle, maxVerticalAngle);
 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0f);
-
-        // ★ 핵심: pivotPos를 올리기 전에 천장 체크
         Vector3 safeOffset = GetSafePivotOffset();
         Vector3 pivotPos = target.position + safeOffset;
 
+        // 1차: SphereCast로 목표 거리 계산
         float targetDistance = GetTargetDistance(pivotPos, rotation);
 
+        // 보간
         if (targetDistance < _currentDistance)
             _currentDistance = Mathf.Lerp(_currentDistance, targetDistance, Time.deltaTime * pullInSpeed);
         else
             _currentDistance = Mathf.Lerp(_currentDistance, targetDistance, Time.deltaTime * pullOutSpeed);
 
-        transform.position = pivotPos + rotation * new Vector3(0f, 0f, -_currentDistance);
+        // 최종 카메라 위치 계산
+        Vector3 desiredPos = pivotPos + rotation * new Vector3(0f, 0f, -_currentDistance);
+
+        // 2차: 최종 위치가 벽 안인지 OverlapSphere로 검증
+        desiredPos = ValidateCameraPosition(pivotPos, desiredPos, rotation);
+
+        transform.position = desiredPos;
         transform.rotation = rotation;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
-    // ★ 추가된 함수: offset 올리기 전에 천장 체크
+    // ★ 2차 검증: 카메라 위치가 벽 안에 있으면 강제로 밀어냄
+    Vector3 ValidateCameraPosition(Vector3 pivotPos, Vector3 desiredPos, Quaternion rotation)
+    {
+        Collider[] overlaps = Physics.OverlapSphere(desiredPos, cameraRadius, collisionLayers);
+
+        if (overlaps.Length == 0) return desiredPos; // 겹치는 거 없으면 그대로
+
+        // 겹치면 pivot 방향으로 당기기
+        Vector3 dir = (desiredPos - pivotPos).normalized;
+        float totalDist = Vector3.Distance(pivotPos, desiredPos);
+
+        // pivot에서 카메라 방향으로 짧게 짧게 쪼개서 안전한 위치 탐색
+        int steps = 20;
+        float stepSize = totalDist / steps;
+
+        for (int i = steps - 1; i >= 0; i--)
+        {
+            Vector3 checkPos = pivotPos + dir * (stepSize * i);
+            if (Physics.OverlapSphere(checkPos, cameraRadius, collisionLayers).Length == 0)
+            {
+                _currentDistance = stepSize * i; // 현재 거리도 업데이트
+                return checkPos;
+            }
+        }
+
+        // 모든 위치가 막히면 pivot에 붙임
+        _currentDistance = minDistance;
+        return pivotPos + dir * minDistance;
+    }
+
     Vector3 GetSafePivotOffset()
     {
-        float wantedOffsetY = targetOffset.y;
-
-        // 플레이어에서 위로 올릴 때 천장에 막히는지 체크
         if (Physics.SphereCast(
-                target.position,        // 플레이어 위치에서
+                target.position,
                 cameraRadius,
-                Vector3.up,             // 위 방향으로
+                Vector3.up,
                 out RaycastHit hit,
-                wantedOffsetY,
+                targetOffset.y,
                 collisionLayers))
         {
-            // 천장에 막히면 그 아래까지만 올림
             float safeY = Mathf.Max(hit.distance - cameraRadius, 0f);
             return new Vector3(targetOffset.x, safeY, targetOffset.z);
         }
 
-        return targetOffset; // 안 막히면 원래 offset
+        return targetOffset;
     }
 
     float GetTargetDistance(Vector3 pivotPos, Quaternion rotation)
     {
-        Vector3 dir = rotation * Vector3.back; // 카메라 뒤 방향
+        Vector3 dir = rotation * Vector3.back;
 
-        // SphereCast: 피벗에서 카메라 방향으로 쏨
         if (Physics.SphereCast(
-                pivotPos,           // 피벗(머리 위)에서 시작 → 플레이어 콜라이더 안 걸림
+                pivotPos,
                 cameraRadius,
                 dir,
                 out RaycastHit hit,
                 distance,
                 collisionLayers))
         {
-            // 벽에 닿으면 그 거리로 당김 (cameraRadius만큼 여유)
             return Mathf.Max(hit.distance - cameraRadius, minDistance);
         }
 
-        return distance; // 안 닿으면 원래 거리 복귀
+        return distance;
     }
 }
