@@ -33,39 +33,25 @@ public class PushableObject : MonoBehaviour
         rb.mass = mass;
         rb.linearDamping = drag;
         rb.angularDamping = 999f;
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
+        //rb.constraints = RigidbodyConstraints.FreezeRotation;
         if (lockX) rb.constraints |= RigidbodyConstraints.FreezePositionX;
         if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionZ;
+        if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionY;
 
         StartPosition = transform.position;
     }
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("SoulCore"))
-        {
-            var curForm = collision.gameObject.GetComponent<PlayerFormController>().currentForm;
-            if(curForm == PlayerForm.Soul)
-            {
-                rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ |
-                    RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-            }
-            else
-            {
-                rb.constraints = RigidbodyConstraints.FreezeRotation;
-                if (lockX) rb.constraints |= RigidbodyConstraints.FreezePositionX;
-                if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionZ;
-            }
-        }
-    }
+    public Collider Col { get; private set; }
+
+    void Awake() => Col = GetComponent<Collider>();
 
     void FixedUpdate()
     {
         CheckGrounded();
 
-        if (isGrounded)
-            rb.constraints |= RigidbodyConstraints.FreezePositionY;
-        else
-            rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+        //if (isGrounded)
+        //    rb.constraints |= RigidbodyConstraints.FreezePositionY;
+        //else
+        //    rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
 
         Vector3 vel = rb.linearVelocity;
         Vector3 hVel = new Vector3(vel.x, 0f, vel.z);
@@ -100,5 +86,23 @@ public class PushableObject : MonoBehaviour
         Vector3 a = new Vector3(transform.position.x, 0f, transform.position.z);
         Vector3 b = new Vector3(targetPos.x, 0f, targetPos.z);
         return Vector3.Distance(a, b) <= radius;
+    }
+
+    public void FreezeInIce(Transform iceParent)
+    {
+        rb.isKinematic = true;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+        transform.SetParent(iceParent);
+    }
+
+    public void ReleaseFromIce()
+    {
+        transform.SetParent(null);
+        rb.constraints = RigidbodyConstraints.None;
+        rb.angularDamping = 999f;
+        if (lockX) rb.constraints |= RigidbodyConstraints.FreezePositionX;
+        if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionZ;
+        if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionY;
+        rb.isKinematic = false;
     }
 }

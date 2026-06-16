@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -34,6 +35,7 @@ public class PlayerFormController : MonoBehaviour
     private PlayerInputSystem controls;
     private Vector3 defaultColliderSize;     // Inspector에서 설정한 기본 BoxCollider 크기
     private Coroutine hologramCoroutine;
+    private List<PushableObject> _frozenObjects = new List<PushableObject>();
 
     void Awake() => controls = new PlayerInputSystem();
     void OnEnable() => controls.Enable();
@@ -46,6 +48,9 @@ public class PlayerFormController : MonoBehaviour
 
         if (humanoidHologram != null) humanoidHologram.SetActive(false);
         if (blockUIGroup != null) blockUIGroup.alpha = 0f;
+
+        // 시작 시 Soul 형태이므로 PushableObject와 충돌 무시
+        SetSoulIgnorePushables(true);
     }
 
     void Update()
@@ -97,15 +102,52 @@ public class PlayerFormController : MonoBehaviour
             QueryTriggerInteraction.Ignore // LiquidPassage, 파이프 등 트리거 무시
         );
 
-        // 자기 자신 및 자식 오브젝트 제외
         foreach (var hit in hits)
         {
             if (hit.gameObject == gameObject) continue;
             if (hit.transform.IsChildOf(transform)) continue;
-            return false; // 실제 장애물 발견
+            if (hit.TryGetComponent<PushableObject>(out _)) continue; // 얼음에 고정할 오브젝트는 허용
+            return false;
         }
 
         return true;
+    }
+
+    void SetSoulIgnorePushables(bool ignore)
+    {
+        foreach (var po in FindObjectsByType<PushableObject>(FindObjectsSortMode.None))
+        {
+            Physics.IgnoreCollision(soulCollider, po.Col, ignore);
+            if (ignore)
+            {
+                // 이미 쌓인 velocity 초기화
+                var rb = po.GetComponent<Rigidbody>();
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
+    }
+
+    List<PushableObject> CollectFrozenCandidates()
+    {
+        float predictedSize = (sizeIndex > 100) ? (1 + sizeIndex) / 250.0f : 1.0f;
+        Vector3 halfExtents = defaultColliderSize * predictedSize * 0.5f;
+        Vector3 checkCenter = transform.position + Vector3.up * halfExtents.y;
+
+        Collider[] hits = Physics.OverlapBox(
+            checkCenter, halfExtents * 0.95f,
+            transform.rotation, Physics.AllLayers,
+            QueryTriggerInteraction.Ignore);
+
+        var result = new List<PushableObject>();
+        foreach (var hit in hits)
+        {
+            if (hit.gameObject == gameObject) continue;
+            if (hit.transform.IsChildOf(transform)) continue;
+            if (hit.TryGetComponent<PushableObject>(out var po))
+                result.Add(po);
+        }
+        return result;
     }
 
     // ── 변신 불가 피드백 ────────────────────────────────────────────────────────
@@ -161,12 +203,18 @@ public class PlayerFormController : MonoBehaviour
         var targetConfig = cCam.Target;
         if (currentForm == PlayerForm.Humanoid)
         {
+            // 얼음 해제: Soul로 돌아오면 고정된 오브젝트 물리 복원
+            foreach (var po in _frozenObjects)
+                po.ReleaseFromIce();
+            _frozenObjects.Clear();
+
             GetComponent<Rigidbody>().mass = 1;
             currentForm = PlayerForm.Soul;
             humanoidForm.SetActive(false);
             soulForm.SetActive(true);
             humanoidCollider.enabled = false;
             soulCollider.enabled = true;
+            SetSoulIgnorePushables(true); // soulCollider 활성화 이후에 호출해야 정상 동작
             pps.SetSoul(sizeIndex);
             sizeIndex = 0;
             targetConfig.TrackingTarget = soutTrackingTarget.transform;
@@ -174,6 +222,13 @@ public class PlayerFormController : MonoBehaviour
         }
         else
         {
+            SetSoulIgnorePushables(false); // Humanoid 형태: 충돌 복원
+
+            // 콜라이더 활성화 전에 먼저 얼려야 물리 충돌로 밀려나지 않음
+            _frozenObjects = CollectFrozenCandidates();
+            foreach (var po in _frozenObjects)
+                po.FreezeInIce(transform);
+
             GetComponent<Rigidbody>().mass = 4;
             currentForm = PlayerForm.Humanoid;
             humanoidForm.SetActive(true);

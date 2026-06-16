@@ -25,7 +25,7 @@ public class SceneExitTrigger : MonoBehaviour
         if (!other.gameObject.CompareTag("SoulCore")) return;
 
         triggered = true;
-        end.SetActive(true);
+        //end.SetActive(true);
         StartCoroutine(ToLoby());
         //StartCoroutine(TransitionRoutine());
     }
