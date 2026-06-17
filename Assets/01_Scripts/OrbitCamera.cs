@@ -8,7 +8,7 @@ public class OrbitCamera : MonoBehaviour
 
     [Header("거리")]
     public float distance = 5f;
-    public float minDistance = 0.5f;
+    public float minDistance = 0f;
 
     [Header("회전 속도")]
     public float mouseSpeedX = 3f;
@@ -20,21 +20,31 @@ public class OrbitCamera : MonoBehaviour
 
     [Header("충돌")]
     public LayerMask collisionLayers;
-    public float cameraRadius = 0.15f;
+    public float cameraRadius = 0.2f;
 
-    [Header("거리 보간 속도")]
-    public float pullInSpeed = 15f;
-    public float pullOutSpeed = 3f;
+    [Header("거리 보간")]
+    public float pullInSpeed = 25f;
+    public float pullOutSpeed = 4f;
 
     private float _yaw;
     private float _pitch;
     private float _currentDistance;
+    private Camera _cam;
+    private SphereCollider _dummyCollider;
 
     void Start()
     {
         _yaw = transform.eulerAngles.y;
-        _pitch = 20f; // 살짝 내려다보기
+        _pitch = 20f;
         _currentDistance = distance;
+        _cam = GetComponent<Camera>();
+
+        if (_cam != null) _cam.nearClipPlane = 0.01f;
+
+        // ComputePenetration용 더미 콜라이더
+        _dummyCollider = gameObject.AddComponent<SphereCollider>();
+        _dummyCollider.radius = cameraRadius;
+        _dummyCollider.isTrigger = true;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -44,7 +54,6 @@ public class OrbitCamera : MonoBehaviour
     {
         if (target == null) return;
 
-        // 마우스 입력
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSpeedX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSpeedY;
 
@@ -53,26 +62,24 @@ public class OrbitCamera : MonoBehaviour
         _pitch = Mathf.Clamp(_pitch, minVerticalAngle, maxVerticalAngle);
 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0f);
-        Vector3 safeOffset = GetSafePivotOffset();
-        Vector3 pivotPos = target.position + safeOffset;
+        Vector3 pivot = target.position + GetSafePivotOffset();
 
-        // 1차: SphereCast로 목표 거리 계산
-        float targetDistance = GetTargetDistance(pivotPos, rotation);
+        float targetDist = GetSafeDistance(pivot, rotation);
 
-        // 보간
-        if (targetDistance < _currentDistance)
-            _currentDistance = Mathf.Lerp(_currentDistance, targetDistance, Time.deltaTime * pullInSpeed);
-        else
-            _currentDistance = Mathf.Lerp(_currentDistance, targetDistance, Time.deltaTime * pullOutSpeed);
+        float lerpSpeed = targetDist < _currentDistance ? pullInSpeed : pullOutSpeed;
+        _currentDistance = Mathf.Lerp(_currentDistance, targetDist, Time.deltaTime * lerpSpeed);
+        _currentDistance = Mathf.Clamp(_currentDistance, minDistance, distance);
 
-        // 최종 카메라 위치 계산
-        Vector3 desiredPos = pivotPos + rotation * new Vector3(0f, 0f, -_currentDistance);
+        Vector3 finalPos = pivot + rotation * new Vector3(0f, 0f, -_currentDistance);
 
-        // 2차: 최종 위치가 벽 안인지 OverlapSphere로 검증
-        desiredPos = ValidateCameraPosition(pivotPos, desiredPos, rotation);
+        // ★ 코너 뚫림 방지: 최종 위치 강제 보정
+        finalPos = PushOutOfWall(finalPos, pivot);
 
-        transform.position = desiredPos;
+        transform.position = finalPos;
         transform.rotation = rotation;
+
+        if (_cam != null)
+            _cam.nearClipPlane = Mathf.Lerp(0.01f, 0.3f, _currentDistance / distance);
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -81,34 +88,34 @@ public class OrbitCamera : MonoBehaviour
         }
     }
 
-    // ★ 2차 검증: 카메라 위치가 벽 안에 있으면 강제로 밀어냄
-    Vector3 ValidateCameraPosition(Vector3 pivotPos, Vector3 desiredPos, Quaternion rotation)
+    Vector3 PushOutOfWall(Vector3 camPos, Vector3 pivot)
     {
-        Collider[] overlaps = Physics.OverlapSphere(desiredPos, cameraRadius, collisionLayers);
-
-        if (overlaps.Length == 0) return desiredPos; // 겹치는 거 없으면 그대로
-
-        // 겹치면 pivot 방향으로 당기기
-        Vector3 dir = (desiredPos - pivotPos).normalized;
-        float totalDist = Vector3.Distance(pivotPos, desiredPos);
-
-        // pivot에서 카메라 방향으로 짧게 짧게 쪼개서 안전한 위치 탐색
-        int steps = 20;
-        float stepSize = totalDist / steps;
-
-        for (int i = steps - 1; i >= 0; i--)
+        for (int i = 0; i < 5; i++)
         {
-            Vector3 checkPos = pivotPos + dir * (stepSize * i);
-            if (Physics.OverlapSphere(checkPos, cameraRadius, collisionLayers).Length == 0)
+            Collider[] overlaps = Physics.OverlapSphere(camPos, cameraRadius, collisionLayers);
+            if (overlaps.Length == 0) break;
+
+            foreach (Collider col in overlaps)
             {
-                _currentDistance = stepSize * i; // 현재 거리도 업데이트
-                return checkPos;
+                if (col == _dummyCollider) continue;  // 자기 자신 무시
+
+                if (Physics.ComputePenetration(
+                        _dummyCollider,
+                        camPos,
+                        Quaternion.identity,
+                        col,
+                        col.transform.position,
+                        col.transform.rotation,
+                        out Vector3 pushDir,
+                        out float pushDist))
+                {
+                    camPos += pushDir * (pushDist + 0.01f);
+                }
             }
         }
 
-        // 모든 위치가 막히면 pivot에 붙임
-        _currentDistance = minDistance;
-        return pivotPos + dir * minDistance;
+        _currentDistance = Mathf.Clamp(Vector3.Distance(camPos, pivot), 0f, distance);
+        return camPos;
     }
 
     Vector3 GetSafePivotOffset()
@@ -124,25 +131,37 @@ public class OrbitCamera : MonoBehaviour
             float safeY = Mathf.Max(hit.distance - cameraRadius, 0f);
             return new Vector3(targetOffset.x, safeY, targetOffset.z);
         }
-
         return targetOffset;
     }
 
-    float GetTargetDistance(Vector3 pivotPos, Quaternion rotation)
+    float GetSafeDistance(Vector3 pivot, Quaternion rotation)
     {
         Vector3 dir = rotation * Vector3.back;
+        float safeDist = distance;
 
-        if (Physics.SphereCast(
-                pivotPos,
-                cameraRadius,
-                dir,
-                out RaycastHit hit,
-                distance,
-                collisionLayers))
+        Vector3[] offsets =
         {
-            return Mathf.Max(hit.distance - cameraRadius, minDistance);
+            Vector3.zero,
+            rotation * new Vector3( cameraRadius, 0,           0),
+            rotation * new Vector3(-cameraRadius, 0,           0),
+            rotation * new Vector3(0,             cameraRadius, 0),
+            rotation * new Vector3(0,            -cameraRadius, 0),
+        };
+
+        foreach (Vector3 offset in offsets)
+        {
+            if (Physics.Raycast(
+                    pivot + offset,
+                    dir,
+                    out RaycastHit hit,
+                    distance,
+                    collisionLayers))
+            {
+                float d = Mathf.Max(hit.distance - cameraRadius, 0f);
+                if (d < safeDist) safeDist = d;
+            }
         }
 
-        return distance;
+        return safeDist;
     }
 }
