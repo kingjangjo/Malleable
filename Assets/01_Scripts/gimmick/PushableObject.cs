@@ -88,15 +88,23 @@ public class PushableObject : MonoBehaviour
         return Vector3.Distance(a, b) <= radius;
     }
 
-    public void FreezeInIce(Transform iceParent)
+    public void FreezeInIce(Transform iceParent, Collider playerCollider)
     {
         rb.isKinematic = true;
         rb.constraints = RigidbodyConstraints.FreezeAll;
         transform.SetParent(iceParent);
+
+        // ★ 추가: 얼리는 순간 플레이어와의 충돌을 무시
+        if (Col != null && playerCollider != null)
+            Physics.IgnoreCollision(Col, playerCollider, true);
     }
 
-    public void ReleaseFromIce()
+    public void ReleaseFromIce(Collider playerCollider)
     {
+        // ★ 추가: 풀리기 전에 충돌 무시 해제
+        if (Col != null && playerCollider != null)
+            Physics.IgnoreCollision(Col, playerCollider, false);
+
         transform.SetParent(null);
         rb.constraints = RigidbodyConstraints.None;
         rb.angularDamping = 999f;

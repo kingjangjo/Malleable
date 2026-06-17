@@ -203,9 +203,8 @@ public class PlayerFormController : MonoBehaviour
         var targetConfig = cCam.Target;
         if (currentForm == PlayerForm.Humanoid)
         {
-            // 얼음 해제: Soul로 돌아오면 고정된 오브젝트 물리 복원
             foreach (var po in _frozenObjects)
-                po.ReleaseFromIce();
+                po.ReleaseFromIce(humanoidCollider);   // ★ humanoidCollider 전달
             _frozenObjects.Clear();
 
             GetComponent<Rigidbody>().mass = 1;
@@ -227,7 +226,7 @@ public class PlayerFormController : MonoBehaviour
             // 콜라이더 활성화 전에 먼저 얼려야 물리 충돌로 밀려나지 않음
             _frozenObjects = CollectFrozenCandidates();
             foreach (var po in _frozenObjects)
-                po.FreezeInIce(transform);
+                po.FreezeInIce(transform, humanoidCollider);   // ★ humanoidCollider 전달
 
             GetComponent<Rigidbody>().mass = 4;
             currentForm = PlayerForm.Humanoid;
