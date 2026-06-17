@@ -41,6 +41,11 @@ public class SettingManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void OnEnable()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
     private void OnDestroy()
     {
@@ -94,29 +99,65 @@ public class SettingManager : MonoBehaviour
         }
     }
 
+    //private void Update()
+    //{
+    //    if (settingUI == null) return;
+
+    //    if (Input.GetKeyDown(KeyCode.Escape))
+    //    {
+    //        if (settingUI.activeSelf)
+    //        {
+    //            // 설정창 닫기
+    //            settingUI.SetActive(false);        // ✅ false로 닫음
+    //            Time.timeScale = 1f;
+    //            SaveSettings();
+
+    //            // 커서 상태를 현재 씬에 맞게 복구
+    //            ApplyDefaultCursorState(SceneManager.GetActiveScene().name);
+    //        }
+    //        else
+    //        {
+    //            // 설정창 열기
+    //            settingUI.SetActive(true);         // ✅ true로 열음
+    //            Time.timeScale = 0f;
+
+    //            // 커서 보이게 + 화면 안에서 자유롭게 움직이게
+    //            Cursor.lockState = CursorLockMode.None;
+    //            Cursor.visible = true;
+    //        }
+    //    }
+    //}
     private void Update()
     {
         if (settingUI == null) return;
+
+        // ★ 추가: 설정창이 닫혀있는 인게임 상태인데 커서가 풀려있으면 강제로 다시 잠금
+        if (!settingUI.activeSelf)
+        {
+            string currentScene = SceneManager.GetActiveScene().name;
+            if (currentScene != LobySceneName)
+            {
+                if (Cursor.lockState != CursorLockMode.Locked || Cursor.visible)
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
+            }
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (settingUI.activeSelf)
             {
-                // 설정창 닫기
-                settingUI.SetActive(false);        // ✅ false로 닫음
+                settingUI.SetActive(false);
                 Time.timeScale = 1f;
                 SaveSettings();
-
-                // 커서 상태를 현재 씬에 맞게 복구
                 ApplyDefaultCursorState(SceneManager.GetActiveScene().name);
             }
             else
             {
-                // 설정창 열기
-                settingUI.SetActive(true);         // ✅ true로 열음
+                settingUI.SetActive(true);
                 Time.timeScale = 0f;
-
-                // 커서 보이게 + 화면 안에서 자유롭게 움직이게
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
