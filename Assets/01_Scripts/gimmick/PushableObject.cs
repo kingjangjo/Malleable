@@ -101,10 +101,6 @@ public class PushableObject : MonoBehaviour
 
     public void ReleaseFromIce(Collider playerCollider)
     {
-        // ★ 추가: 풀리기 전에 충돌 무시 해제
-        if (Col != null && playerCollider != null)
-            Physics.IgnoreCollision(Col, playerCollider, false);
-
         transform.SetParent(null);
         rb.constraints = RigidbodyConstraints.None;
         rb.angularDamping = 999f;
@@ -112,5 +108,15 @@ public class PushableObject : MonoBehaviour
         if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionZ;
         if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionY;
         rb.isKinematic = false;
+
+        // 약간의 딜레이를 두고 충돌을 복원 (겹침 해소 후 복원)
+        StartCoroutine(RestoreCollisionAfterDelay(playerCollider, 0.3f));
+    }
+
+    System.Collections.IEnumerator RestoreCollisionAfterDelay(Collider playerCollider, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (Col != null && playerCollider != null)
+            Physics.IgnoreCollision(Col, playerCollider, false);
     }
 }
