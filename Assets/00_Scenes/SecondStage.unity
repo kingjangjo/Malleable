@@ -308136,6 +308136,12 @@ MonoBehaviour:
   soutTrackingTarget: {fileID: 1024901977}
   humanoidTrackingTarget: {fileID: 1917294580}
   cCam: {fileID: 748040615}
+  groundCheckDistance: 3
+  minAirborneHeight: 0.5
+  groundedRiseOffset: 0.6
+  groundCheckLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   humanoidHologram: {fileID: 1600350263}
   blockUIGroup: {fileID: 734838825}
   hologramDuration: 1.5

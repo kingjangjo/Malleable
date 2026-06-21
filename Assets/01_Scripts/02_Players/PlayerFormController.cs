@@ -22,7 +22,18 @@ public class PlayerFormController : MonoBehaviour
     public GameObject humanoidTrackingTarget;
     public CinemachineCamera cCam;
 
-    [Header("변신 불가 피드백")]
+    [Header("변신 시 위치 보정 (바닥 끼임 방지)")]
+    [Tooltip("Soul -> Humanoid 변신 시, 발밑 바닥까지의 거리를 측정할 레이캐스트 최대 거리")]
+    public float groundCheckDistance = 3f;
+    [Tooltip("발밑 바닥까지의 거리가 이 값보다 작으면 '바닥에 붙어있음'으로 간주해 위치를 들어올림. 이 값보다 크면 '공중'으로 간주해 보정 없이 현재 위치 그대로 변신")]
+    public float minAirborneHeight = 0.5f;
+    [Tooltip("바닥에 붙어있을 때 변신 시 추가로 들어올릴 높이")]
+    public float groundedRiseOffset = 0.6f;
+    [Tooltip("바닥 감지에 사용할 레이어 (Ground, Environment 등)")]
+    public LayerMask groundCheckLayers = ~0;
+
+    
+[Header("변신 불가 피드백")]
     [SerializeField] private GameObject humanoidHologram;   // 빨간 반투명 휴머노이드 메쉬
     [SerializeField] private CanvasGroup blockUIGroup;      // "변신 불가" 텍스트 CanvasGroup
     [SerializeField] private float hologramDuration = 1.5f;
@@ -80,7 +91,7 @@ public class PlayerFormController : MonoBehaviour
 
     // ── 변신 가능 여부 체크 ─────────────────────────────────────────────────────
 
-    bool CanTransformToHumanoid()
+bool CanTransformToHumanoid()
     {
         // SetHumanoid() 호출 전이므로 현재 sizeIndex로 예상 크기 계산
         float predictedSize = (sizeIndex > 100)
@@ -90,8 +101,10 @@ public class PlayerFormController : MonoBehaviour
         // 변신 후 콜라이더 반크기
         Vector3 halfExtents = defaultColliderSize * predictedSize * 0.5f;
 
-        // FormChange()에서 Y오프셋을 더하는 것과 동일하게 체크 위치 설정
-        Vector3 checkCenter = transform.position + Vector3.up * halfExtents.y;
+        // 바닥에 붙어있으면 들어올린 위치를 기준으로, 공중이면 현재 위치 그대로 기준으로 체크
+        float riseOffset = CalculateGroundRiseOffset();
+        Vector3 basePosition = transform.position + Vector3.up * riseOffset;
+        Vector3 checkCenter = basePosition + Vector3.up * halfExtents.y;
 
         // 플레이어 자신과 트리거 제외
         Collider[] hits = Physics.OverlapBox(
@@ -113,6 +126,25 @@ public class PlayerFormController : MonoBehaviour
         return true;
     }
 
+
+// Calculates the Y offset to use when transforming Soul -> Humanoid.
+    // If the feet are nearly touching the ground (distance < minAirborneHeight),
+    // rise by groundedRiseOffset. If already airborne (distance >= minAirborneHeight),
+    // return 0 so the current position is used as-is.
+float CalculateGroundRiseOffset()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, groundCheckDistance, groundCheckLayers, QueryTriggerInteraction.Ignore))
+        {
+            float distanceToGround = hit.distance;
+            if (distanceToGround < minAirborneHeight)
+            {
+                return groundedRiseOffset;
+            }
+        }
+        return 0f;
+    }
+
+
     void SetSoulIgnorePushables(bool ignore)
     {
         foreach (var po in FindObjectsByType<PushableObject>(FindObjectsSortMode.None))
@@ -128,11 +160,14 @@ public class PlayerFormController : MonoBehaviour
         }
     }
 
-    List<PushableObject> CollectFrozenCandidates()
+List<PushableObject> CollectFrozenCandidates()
     {
         float predictedSize = (sizeIndex > 100) ? (1 + sizeIndex) / 250.0f : 1.0f;
         Vector3 halfExtents = defaultColliderSize * predictedSize * 0.5f;
-        Vector3 checkCenter = transform.position + Vector3.up * halfExtents.y;
+
+        float riseOffset = CalculateGroundRiseOffset();
+        Vector3 basePosition = transform.position + Vector3.up * riseOffset;
+        Vector3 checkCenter = basePosition + Vector3.up * halfExtents.y;
 
         Collider[] hits = Physics.OverlapBox(
             checkCenter, halfExtents * 0.95f,
@@ -198,14 +233,13 @@ public class PlayerFormController : MonoBehaviour
 
     // ── 실제 변신 (기존과 동일) ──────────────────────────────────────────────────
 
-    void FormChange()
+void FormChange()
     {
         var targetConfig = cCam.Target;
         if (currentForm == PlayerForm.Humanoid)
         {
             foreach (var po in _frozenObjects)
                 po.ReleaseFromIce();
-            //po.ReleaseFromIce(humanoidCollider);   // ★ humanoidCollider 전달
             _frozenObjects.Clear();
 
             GetComponent<Rigidbody>().mass = 1;
@@ -214,7 +248,7 @@ public class PlayerFormController : MonoBehaviour
             soulForm.SetActive(true);
             humanoidCollider.enabled = false;
             soulCollider.enabled = true;
-            SetSoulIgnorePushables(true); // soulCollider 활성화 이후에 호출해야 정상 동작
+            SetSoulIgnorePushables(true);
             pps.SetSoul(sizeIndex);
             sizeIndex = 0;
             targetConfig.TrackingTarget = soutTrackingTarget.transform;
@@ -222,13 +256,19 @@ public class PlayerFormController : MonoBehaviour
         }
         else
         {
-            SetSoulIgnorePushables(false); // Humanoid 형태: 충돌 복원
+            SetSoulIgnorePushables(false);
 
-            // 콜라이더 활성화 전에 먼저 얼려야 물리 충돌로 밀려나지 않음
+            // Ground rise correction: apply offset before collider/overlap checks
+            float riseOffset = CalculateGroundRiseOffset();
+            if (riseOffset > 0f)
+            {
+                transform.position += Vector3.up * riseOffset;
+            }
+
+            // Freeze candidates before enabling the humanoid collider, so physics doesn't push them away
             _frozenObjects = CollectFrozenCandidates();
             foreach (var po in _frozenObjects)
                 po.FreezeInIce(transform);
-            //po.FreezeInIce(transform, humanoidCollider);   // ★ humanoidCollider 전달
 
             GetComponent<Rigidbody>().mass = 4;
             currentForm = PlayerForm.Humanoid;
