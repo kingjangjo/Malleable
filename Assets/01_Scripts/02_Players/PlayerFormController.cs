@@ -204,7 +204,8 @@ public class PlayerFormController : MonoBehaviour
         if (currentForm == PlayerForm.Humanoid)
         {
             foreach (var po in _frozenObjects)
-                po.ReleaseFromIce(humanoidCollider);   // ★ humanoidCollider 전달
+                po.ReleaseFromIce();
+            //po.ReleaseFromIce(humanoidCollider);   // ★ humanoidCollider 전달
             _frozenObjects.Clear();
 
             GetComponent<Rigidbody>().mass = 1;
@@ -226,7 +227,8 @@ public class PlayerFormController : MonoBehaviour
             // 콜라이더 활성화 전에 먼저 얼려야 물리 충돌로 밀려나지 않음
             _frozenObjects = CollectFrozenCandidates();
             foreach (var po in _frozenObjects)
-                po.FreezeInIce(transform, humanoidCollider);   // ★ humanoidCollider 전달
+                po.FreezeInIce(transform);
+            //po.FreezeInIce(transform, humanoidCollider);   // ★ humanoidCollider 전달
 
             GetComponent<Rigidbody>().mass = 4;
             currentForm = PlayerForm.Humanoid;

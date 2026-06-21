@@ -23,9 +23,18 @@ public class PushableObject : MonoBehaviour
 
     public bool HasMoved { get; private set; }
     public Vector3 StartPosition { get; private set; }
+    public Collider Col { get; private set; }
 
     private Rigidbody rb;
     private bool isGrounded;
+
+    // ── 얼음 고정 관련 ────────────────────────────────────────────
+    private bool isFrozen;
+    private Transform freezeTarget;     // 따라갈 대상 (플레이어)
+    private Vector3 freezeLocalOffset;  // freezeTarget 로컬 기준 상대 위치
+    private Quaternion freezeLocalRot;  // freezeTarget 로컬 기준 상대 회전
+
+    void Awake() => Col = GetComponent<Collider>();
 
     void Start()
     {
@@ -33,25 +42,18 @@ public class PushableObject : MonoBehaviour
         rb.mass = mass;
         rb.linearDamping = drag;
         rb.angularDamping = 999f;
-        //rb.constraints = RigidbodyConstraints.FreezeRotation;
         if (lockX) rb.constraints |= RigidbodyConstraints.FreezePositionX;
         if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionZ;
         if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionY;
 
         StartPosition = transform.position;
     }
-    public Collider Col { get; private set; }
-
-    void Awake() => Col = GetComponent<Collider>();
 
     void FixedUpdate()
     {
-        CheckGrounded();
+        if (isFrozen) return; // 얼어있는 동안은 일반 물리 로직 스킵
 
-        //if (isGrounded)
-        //    rb.constraints |= RigidbodyConstraints.FreezePositionY;
-        //else
-        //    rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+        CheckGrounded();
 
         Vector3 vel = rb.linearVelocity;
         Vector3 hVel = new Vector3(vel.x, 0f, vel.z);
@@ -73,6 +75,18 @@ public class PushableObject : MonoBehaviour
         }
     }
 
+    // ★ 얼어있는 동안 위치를 직접 갱신 (SetParent 없이)
+    // FixedUpdate 이후, 일반 LateUpdate보다 물리 갱신과 더 가깝게 맞추기 위해
+    // Update 대신 사용 가능하지만 카메라 따라가는 정도면 LateUpdate가 더 안전
+    void LateUpdate()
+    {
+        if (!isFrozen || freezeTarget == null) return;
+
+        // 로컬 오프셋을 월드 좌표로 변환해서 그대로 따라가게 함
+        transform.position = freezeTarget.TransformPoint(freezeLocalOffset);
+        transform.rotation = freezeTarget.rotation * freezeLocalRot;
+    }
+
     void CheckGrounded()
     {
         float halfH = transform.localScale.y * 0.5f;
@@ -88,35 +102,31 @@ public class PushableObject : MonoBehaviour
         return Vector3.Distance(a, b) <= radius;
     }
 
-    public void FreezeInIce(Transform iceParent, Collider playerCollider)
+    // ── 얼리기 / 풀기 ─────────────────────────────────────────────
+
+    public void FreezeInIce(Transform iceParent)
     {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        // Rigidbody를 물리 시뮬레이션에서 완전히 빼버림
         rb.isKinematic = true;
-        rb.constraints = RigidbodyConstraints.FreezeAll;
-        transform.SetParent(iceParent);
+        rb.detectCollisions = false;
 
-        // ★ 추가: 얼리는 순간 플레이어와의 충돌을 무시
-        if (Col != null && playerCollider != null)
-            Physics.IgnoreCollision(Col, playerCollider, true);
+        // SetParent 대신 상대 위치/회전을 로컬 좌표로 저장
+        // → Transform 계층은 안 건드리므로 Rigidbody 중첩 문제 없음
+        freezeLocalOffset = iceParent.InverseTransformPoint(transform.position);
+        freezeLocalRot = Quaternion.Inverse(iceParent.rotation) * transform.rotation;
+        freezeTarget = iceParent;
+        isFrozen = true;
     }
 
-    public void ReleaseFromIce(Collider playerCollider)
+    public void ReleaseFromIce()
     {
-        transform.SetParent(null);
-        rb.constraints = RigidbodyConstraints.None;
-        rb.angularDamping = 999f;
-        if (lockX) rb.constraints |= RigidbodyConstraints.FreezePositionX;
-        if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionZ;
-        if (lockZ) rb.constraints |= RigidbodyConstraints.FreezePositionY;
+        isFrozen = false;
+        freezeTarget = null;
+
+        rb.detectCollisions = true;
         rb.isKinematic = false;
-
-        // 약간의 딜레이를 두고 충돌을 복원 (겹침 해소 후 복원)
-        StartCoroutine(RestoreCollisionAfterDelay(playerCollider, 0.3f));
-    }
-
-    System.Collections.IEnumerator RestoreCollisionAfterDelay(Collider playerCollider, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        if (Col != null && playerCollider != null)
-            Physics.IgnoreCollision(Col, playerCollider, false);
     }
 }
