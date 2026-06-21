@@ -127,20 +127,33 @@ bool CanTransformToHumanoid()
     }
 
 
-// Calculates the Y offset to use when transforming Soul -> Humanoid.
+    // Calculates the Y offset to use when transforming Soul -> Humanoid.
     // If the feet are nearly touching the ground (distance < minAirborneHeight),
     // rise by groundedRiseOffset. If already airborne (distance >= minAirborneHeight),
     // return 0 so the current position is used as-is.
-float CalculateGroundRiseOffset()
+    [Header("바닥 감지")]
+    [Tooltip("Raycast 시작점을 위로 띄우는 보정값 (자기 콜라이더 통과 방지)")]
+    public float rayStartOffset = 0.15f;
+
+    float CalculateGroundRiseOffset()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, groundCheckDistance, groundCheckLayers, QueryTriggerInteraction.Ignore))
+        // ★ 시작점을 위로 띄워서 발사
+        Vector3 rayStart = transform.position + Vector3.up * rayStartOffset;
+
+        bool didHit = Physics.Raycast(rayStart, Vector3.down, out RaycastHit hit,
+            groundCheckDistance + rayStartOffset, groundCheckLayers,
+            QueryTriggerInteraction.Ignore);
+
+        Debug.Log($"[GroundCheck] hit={didHit} | distance={(didHit ? hit.distance.ToString("F3") : "N/A")} | " +
+                  $"hitObj={(didHit ? hit.collider.name : "없음")}");
+
+        if (didHit)
         {
-            float distanceToGround = hit.distance;
+            float distanceToGround = hit.distance - rayStartOffset;
             if (distanceToGround < minAirborneHeight)
-            {
                 return groundedRiseOffset;
-            }
         }
+
         return 0f;
     }
 
@@ -160,14 +173,13 @@ float CalculateGroundRiseOffset()
         }
     }
 
-List<PushableObject> CollectFrozenCandidates()
+    List<PushableObject> CollectFrozenCandidates()
     {
         float predictedSize = (sizeIndex > 100) ? (1 + sizeIndex) / 250.0f : 1.0f;
         Vector3 halfExtents = defaultColliderSize * predictedSize * 0.5f;
 
-        float riseOffset = CalculateGroundRiseOffset();
-        Vector3 basePosition = transform.position + Vector3.up * riseOffset;
-        Vector3 checkCenter = basePosition + Vector3.up * halfExtents.y;
+        // ★ 변경: riseOffset 빼고 현재 위치 그대로 기준
+        Vector3 checkCenter = transform.position + Vector3.up * halfExtents.y;
 
         Collider[] hits = Physics.OverlapBox(
             checkCenter, halfExtents * 0.95f,
@@ -258,17 +270,17 @@ void FormChange()
         {
             SetSoulIgnorePushables(false);
 
-            // Ground rise correction: apply offset before collider/overlap checks
+            // ★ 변경: 수집을 먼저 함 (들어올리기 전, 바닥에 있는 그대로의 위치 기준)
+            _frozenObjects = CollectFrozenCandidates();
+            foreach (var po in _frozenObjects)
+                po.FreezeInIce(transform);
+
+            // ★ 변경: 수집 끝난 다음에 들어올림
             float riseOffset = CalculateGroundRiseOffset();
             if (riseOffset > 0f)
             {
                 transform.position += Vector3.up * riseOffset;
             }
-
-            // Freeze candidates before enabling the humanoid collider, so physics doesn't push them away
-            _frozenObjects = CollectFrozenCandidates();
-            foreach (var po in _frozenObjects)
-                po.FreezeInIce(transform);
 
             GetComponent<Rigidbody>().mass = 4;
             currentForm = PlayerForm.Humanoid;
