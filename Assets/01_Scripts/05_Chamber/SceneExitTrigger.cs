@@ -19,15 +19,22 @@ public class SceneExitTrigger : MonoBehaviour
 
     public GameObject end;
 
-    void OnCollisionEnter(Collision other)
+void OnCollisionEnter(Collision other)
     {
         if (triggered) return;
         if (!other.gameObject.CompareTag("SoulCore")) return;
 
         triggered = true;
-        //end.SetActive(true);
-        StartCoroutine(ToLoby());
-        //StartCoroutine(TransitionRoutine());
+
+        if (StageClearUI.Instance != null)
+        {
+            StageClearUI.Instance.ShowClearResult(targetSceneName);
+        }
+        else
+        {
+            // Fallback if StageClearUI isn't present in the scene
+            StartCoroutine(ToLoby());
+        }
     }
     IEnumerator ToLoby()
     {

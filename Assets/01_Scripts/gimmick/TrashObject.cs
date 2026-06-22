@@ -31,6 +31,21 @@ public class TrashObject : MonoBehaviour
     private PlayerFormController playerForm;
     private PlayerInputSystem controls;
 
+void Awake()
+    {
+        controls = new PlayerInputSystem();
+    }
+
+void OnEnable()
+    {
+        controls?.Enable();
+    }
+
+void OnDisable()
+    {
+        controls?.Disable();
+    }
+
     void Start()
     {
         // 플레이어 참조를 한 번만 캐싱 (매 프레임 Find 방지)

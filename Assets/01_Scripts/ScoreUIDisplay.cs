@@ -22,16 +22,19 @@ public class ScoreUIDisplay : MonoBehaviour
                        StageScoreManager.Instance.targetScore);
     }
 
-    void OnEnable()
+void OnEnable()
     {
+        // Static event: always subscribable regardless of StageScoreManager's Awake/Instance timing
+        StageScoreManager.OnScoreChangedStatic.AddListener(UpdateText);
+
+        // Instance may already exist with a non-zero score (e.g. this UI was disabled then re-enabled)
         if (StageScoreManager.Instance != null)
-            StageScoreManager.Instance.onScoreChanged.AddListener(UpdateText);
+            UpdateText(StageScoreManager.Instance.currentStageScore, StageScoreManager.Instance.targetScore);
     }
 
-    void OnDisable()
+void OnDisable()
     {
-        if (StageScoreManager.Instance != null)
-            StageScoreManager.Instance.onScoreChanged.RemoveListener(UpdateText);
+        StageScoreManager.OnScoreChangedStatic.RemoveListener(UpdateText);
     }
 
     public void UpdateText(int current, int target)

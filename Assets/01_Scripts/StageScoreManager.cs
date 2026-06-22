@@ -14,7 +14,11 @@ public class StageScoreManager : MonoBehaviour
     public int targetScore = 20; // 챔버별 목표치 (Inspector에서 조정)
 
     [Header("UI 갱신용 이벤트")]
-    public UnityEvent<int, int> onScoreChanged; // (현재점수, 목표점수)
+    public UnityEvent<int, int> onScoreChanged;
+
+    // Static event so subscription works regardless of Awake/OnEnable order (used by UI)
+    public static readonly UnityEvent<int, int> OnScoreChangedStatic = new UnityEvent<int, int>();
+ // (현재점수, 목표점수)
 
     void Awake()
     {
@@ -32,17 +36,19 @@ public class StageScoreManager : MonoBehaviour
         TrashObject.OnAnyTrashPopped.RemoveListener(AddScore);
     }
 
-    public void AddScore(int amount)
+public void AddScore(int amount)
     {
         currentStageScore += amount;
-        Debug.Log($"쓰레기 처리 +{amount} (현재 {currentStageScore}/{targetScore})");
+        Debug.Log($"Trash processed +{amount} (current {currentStageScore}/{targetScore})");
         onScoreChanged?.Invoke(currentStageScore, targetScore);
+        OnScoreChangedStatic?.Invoke(currentStageScore, targetScore);
     }
 
-    public void ResetForNewStage()
+public void ResetForNewStage()
     {
         currentStageScore = 0;
         onScoreChanged?.Invoke(currentStageScore, targetScore);
+        OnScoreChangedStatic?.Invoke(currentStageScore, targetScore);
     }
 
     public string GetGrade()

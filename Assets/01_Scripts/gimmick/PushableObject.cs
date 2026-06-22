@@ -104,27 +104,32 @@ public class PushableObject : MonoBehaviour
 
     // ── 얼리기 / 풀기 ─────────────────────────────────────────────
 
-    public void FreezeInIce(Transform iceParent)
+public void FreezeInIce(Transform iceParent)
     {
+        if (this == null || rb == null) return;
+
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        // Rigidbody를 물리 시뮬레이션에서 완전히 빼버림
+        // Remove the Rigidbody from physics simulation entirely
         rb.isKinematic = true;
         rb.detectCollisions = false;
 
-        // SetParent 대신 상대 위치/회전을 로컬 좌표로 저장
-        // → Transform 계층은 안 건드리므로 Rigidbody 중첩 문제 없음
+        // Store relative position/rotation as local coords instead of using SetParent
+        // -> doesn't touch the Transform hierarchy, so no Rigidbody nesting issues
         freezeLocalOffset = iceParent.InverseTransformPoint(transform.position);
         freezeLocalRot = Quaternion.Inverse(iceParent.rotation) * transform.rotation;
         freezeTarget = iceParent;
         isFrozen = true;
     }
 
-    public void ReleaseFromIce()
+public void ReleaseFromIce()
     {
         isFrozen = false;
         freezeTarget = null;
+
+        // Object may have already been destroyed (e.g. popped by TrashObject) before this is called.
+        if (this == null || rb == null) return;
 
         rb.detectCollisions = true;
         rb.isKinematic = false;
